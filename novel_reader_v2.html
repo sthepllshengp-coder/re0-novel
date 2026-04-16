@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>苍玄大陆 - 小说阅读网</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-color: #f5f5f5; --text-color: #333; --card-bg: #fff;
+            --primary-color: #2c5282; --accent-color: #3182ce;
+            --border-color: #e2e8f0; --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --font-size: 18px; --line-height: 1.8;
+        }
+        [data-theme="dark"] {
+            --bg-color: #1a202c; --text-color: #e2e8f0; --card-bg: #2d3748;
+            --primary-color: #63b3ed; --accent-color: #4299e1;
+            --border-color: #4a5568; --shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        [data-theme="sepia"] {
+            --bg-color: #f4ecd8; --text-color: #5b4636; --card-bg: #fffef5;
+            --primary-color: #8b4513; --accent-color: #a0522d;
+            --border-color: #d2b48c;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                         "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+            background: var(--bg-color); color: var(--text-color);
+            line-height: var(--line-height); font-size: var(--font-size);
+            transition: background 0.3s, color 0.3s;
+        }
+        .header {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: var(--card-bg); box-shadow: var(--shadow);
+            z-index: 1000; padding: 12px 20px;
+        }
+        .header-content {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .header h1 { font-size: 1.2rem; color: var(--primary-color); }
+        .header-actions { display: flex; gap: 10px; }
+        .btn {
+            padding: 8px 16px; border: none; border-radius: 6px;
+            cursor: pointer; font-size: 14px; transition: all 0.2s;
+            background: var(--bg-color); color: var(--text-color);
+        }
+        .btn:hover { background: var(--primary-color); color: #fff; }
+        .btn-icon { padding: 8px 12px; background: transparent; border: 1px solid var(--border-color); }
+        .sidebar {
+            position: fixed; top: 60px; left: -320px; width: 320px;
+            height: calc(100vh - 60px); background: var(--card-bg);
+            box-shadow: var(--shadow); overflow-y: auto;
+            transition: left 0.3s ease; z-index: 999; padding: 20px 0;
+        }
+        .sidebar.open { left: 0; }
+        .sidebar h3 { padding: 0 20px; margin-bottom: 15px; font-size: 1rem; color: var(--primary-color); }
+        .volume-group { margin: 10px 0; }
+        .volume-title {
+            padding: 10px 20px; font-weight: bold; cursor: pointer;
+            background: rgba(44,82,130,0.1); color: var(--primary-color);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .volume-title:hover { background: rgba(44,82,130,0.2); }
+        .vol-count { font-size: 0.8rem; opacity: 0.7; }
+        .chapter-list { list-style: none; display: none; }
+        .chapter-list.show { display: block; }
+        .chapter-list li a {
+            display: block; padding: 8px 20px 8px 30px;
+            color: var(--text-color); text-decoration: none;
+            font-size: 0.9rem; transition: background 0.2s;
+        }
+        .chapter-list li a:hover, .chapter-list li a.active {
+            background: var(--primary-color); color: #fff;
+        }
+        .overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 998;
+        }
+        .overlay.show { display: block; }
+        .main { max-width: 900px; margin: 80px auto 40px; padding: 0 20px; }
+        .welcome {
+            background: var(--card-bg); border-radius: 12px;
+            padding: 60px 40px; box-shadow: var(--shadow); text-align: center;
+        }
+        .welcome h2 { font-size: 2rem; color: var(--primary-color); margin-bottom: 20px; }
+        .welcome p { font-size: 1.1rem; color: #666; margin-bottom: 30px; }
+        .welcome-actions { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .article {
+            background: var(--card-bg); border-radius: 12px;
+            padding: 40px; box-shadow: var(--shadow); margin-bottom: 30px;
+            display: none;
+        }
+        .article.show { display: block; }
+        .article-header {
+            text-align: center; margin-bottom: 40px;
+            padding-bottom: 20px; border-bottom: 1px solid var(--border-color);
+        }
+        .article-title { font-size: 1.8rem; color: var(--primary-color); margin-bottom: 10px; }
+        .article-meta { font-size: 0.9rem; color: #888; }
+        .article-content { text-indent: 2em; }
+        .article-content p { margin-bottom: 1.5em; }
+        .divider { text-align: center; padding: 20px 0; color: #888; letter-spacing: 0.5em; }
+        .chapter-nav {
+            display: flex; justify-content: space-between;
+            margin-top: 40px; padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+        .chapter-nav a {
+            padding: 12px 24px; background: var(--primary-color);
+            color: #fff; text-decoration: none; border-radius: 6px;
+            transition: opacity 0.2s;
+        }
+        .chapter-nav a:hover { opacity: 0.85; }
+        .chapter-nav a.disabled {
+            background: var(--border-color); cursor: not-allowed; opacity: 0.6;
+        }
+        .settings-panel {
+            position: fixed; top: 60px; right: -300px; width: 280px;
+            background: var(--card-bg); box-shadow: var(--shadow);
+            padding: 20px; border-radius: 12px 0 0 12px;
+            transition: right 0.3s ease; z-index: 999;
+        }
+        .settings-panel.open { right: 0; }
+        .settings-group { margin-bottom: 20px; }
+        .settings-group h4 { margin-bottom: 10px; font-size: 0.9rem; color: var(--primary-color); }
+        .theme-options { display: flex; gap: 10px; }
+        .theme-btn {
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 2px solid var(--border-color); cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .theme-btn:hover, .theme-btn.active { transform: scale(1.1); border-color: var(--primary-color); }
+        .theme-light { background: #f5f5f5; }
+        .theme-dark { background: #1a202c; }
+        .theme-sepia { background: #f4ecd8; }
+        .font-size-options { display: flex; gap: 10px; }
+        .font-btn {
+            flex: 1; padding: 8px; background: var(--bg-color);
+            border: 1px solid var(--border-color); border-radius: 6px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .font-btn:hover, .font-btn.active { background: var(--primary-color); color: #fff; }
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: var(--accent-color); z-index: 1001; transition: width 0.1s;
+        }
+        .loading {
+            text-align: center; padding: 40px; color: #888;
+        }
+        .loading spinner {
+            display: inline-block; width: 30px; height: 30px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 768px) {
+            .article { padding: 25px 20px; }
+            .article-title { font-size: 1.4rem; }
+            .header-content h1 { font-size: 1rem; }
+            .chapter-nav { flex-direction: column; gap: 10px; }
+            .chapter-nav a { text-align: center; }
+            .sidebar { width: 100%; left: -100%; }
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+        .search-box {
+            padding: 10px 20px; margin-bottom: 10px;
+        }
+        .search-box input {
+            width: 100%; padding: 10px; border: 1px solid var(--border-color);
+            border-radius: 6px; background: var(--bg-color);
+            color: var(--text-color); font-size: 14px;
+        }
+        .search-box input:focus {
+            outline: none; border-color: var(--primary-color);
+        }
+        .status-bar {
+            padding: 10px 20px; font-size: 0.85rem;
+            color: #666; border-top: 1px solid var(--border-color);
+        }
+        .local-indicator {
+            display: inline-block; width: 8px; height: 8px;
+            border-radius: 50%; background: var(--accent-color);
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <header class="header">
+        <div class="header-content">
+            <h1 id="headerTitle">苍玄大陆 - 小说阅读网</h1>
+            <div class="header-actions">
+                <button class="btn btn-icon" onclick="toggleSidebar()" title="目录">☰</button>
+                <button class="btn btn-icon" onclick="toggleSettings()" title="设置">⚙</button>
+            </div>
+        </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="search-box">
+            <input type="text" id="chapterSearch" placeholder="搜索章节..." oninput="searchChapters()">
+        </div>
+        <h3>章节目录</h3>
+        <div id="chapterListContainer"></div>
+        <div class="status-bar">
+            本地：<span id="localCount">0</span> / 总计：<span id="totalCount">0</span>
+        </div>
+    </aside>
+
+    <div class="overlay" id="overlay" onclick="closePanels()"></div>
+
+    <aside class="settings-panel" id="settingsPanel">
+        <div class="settings-group">
+            <h4>主题</h4>
+            <div class="theme-options">
+                <button class="theme-btn theme-light active" onclick="setTheme('light')"></button>
+                <button class="theme-btn theme-dark" onclick="setTheme('dark')"></button>
+                <button class="theme-btn theme-sepia" onclick="setTheme('sepia')"></button>
+            </div>
+        </div>
+        <div class="settings-group">
+            <h4>字体大小</h4>
+            <div class="font-size-options">
+                <button class="font-btn" onclick="setFontSize('small')">小</button>
+                <button class="font-btn active" onclick="setFontSize('medium')">中</button>
+                <button class="font-btn" onclick="setFontSize('large')">大</button>
+                <button class="font-btn" onclick="setFontSize('xlarge')">超大</button>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="welcome" id="welcomePanel">
+            <h2>欢迎来到 苍玄大陆</h2>
+            <p>RE0：从零开始的异世界生活 网络小说</p>
+            <div class="welcome-actions">
+                <button class="btn" onclick="loadChapter(0)">从第一章开始阅读</button>
+                <button class="btn" onclick="toggleSidebar()">浏览目录</button>
+            </div>
+            <p style="margin-top:30px;font-size:0.9rem;color:#888;">
+                已缓存 <span id="welcomeLocalCount">0</span> 章 · 支持在线阅读未缓存章节
+            </p>
+        </div>
+
+        <article class="article" id="articlePanel">
+            <header class="article-header">
+                <h1 class="article-title" id="articleTitle"></h1>
+                <div class="article-meta">
+                    <span id="articleMeta"></span>
+                </div>
+            </header>
+            <div class="article-content" id="articleContent">
+                <div class="loading"><spinner></spinner><p>正在加载章节...</p></div>
+            </div>
+            <div class="chapter-nav" id="chapterNav"></div>
+        </article>
+    </main>
+
+    <script>
+        let chapters = [];
+        let localFiles = {};
+        let currentChapter = 0;
+        let expandedVolumes = {};
+
+        const volNames = {
+            '010': '第 1 卷', '020': '第 2 卷', '021': '第 2 卷短篇',
+            '030': '第 3 卷', '040': '第 4 卷', '041': '第 4 卷短篇',
+            '050': '第 5 卷', '060': '第 6 卷', '070': '第 7 卷',
+            '080': '第 8 卷', '090': '第 9 卷', '100': '第 10 卷',
+            '999': '短篇与特别篇'
+        };
+
+        // 加载章节索引
+        async function loadChapterIndex() {
+            try {
+                const response = await fetch('chapter_index_full.json');
+                if (response.ok) {
+                    chapters = await response.json();
+                }
+            } catch (e) {
+                console.error('加载索引失败:', e);
+            }
+        }
+
+        // 检查本地文件 - 简化版：所有章节都在本地
+        function checkLocalFiles() {
+            let localCount = 0;
+
+            // 所有章节都标记为本地可用
+            for (let idx = 0; idx < chapters.length; idx++) {
+                const chap = chapters[idx];
+                if (chap && chap.file) {
+                    localFiles[idx] = true;
+                    localCount++;
+                }
+            }
+
+            document.getElementById('localCount').textContent = localCount;
+            document.getElementById('totalCount').textContent = chapters.length;
+            document.getElementById('welcomeLocalCount').textContent = localCount;
+
+            // 重新渲染目录显示本地标记
+            renderChapterList();
+
+            return localCount;
+        }
+
+        function init() {
+            loadChapterIndex().then(() => {
+                renderChapterList();
+                loadSettings();
+                checkLocalFiles();
+            });
+        }
+
+        function renderChapterList() {
+            const container = document.getElementById('chapterListContainer');
+            const volumes = {};
+
+            chapters.forEach((chap, idx) => {
+                if (!volumes[chap.vol]) volumes[chap.vol] = [];
+                volumes[chap.vol].push({ ...chap, idx });
+            });
+
+            let html = '';
+            Object.keys(volumes).sort().forEach(vol => {
+                const isExpanded = expandedVolumes[vol] !== false;
+                const count = volumes[vol].length;
+                const localCount = volumes[vol].filter(c => localFiles[c.idx]).length;
+
+                html += `<div class="volume-group">
+                    <div class="volume-title" onclick="toggleVolume('${vol}')">
+                        <span>${volNames[vol] || '第'+vol+'卷'}</span>
+                        <span class="vol-count">${localCount}/${count}章 ${isExpanded ? '▼' : '▶'}</span>
+                    </div>
+                    <ul class="chapter-list ${isExpanded ? 'show' : ''}" id="vol-${vol}">`;
+
+                volumes[vol].forEach(chap => {
+                    const isLocal = localFiles[chap.idx] ? '<span class="local-indicator"></span>' : '';
+                    html += `<li><a href="#" onclick="loadChapter(${chap.idx}); return false;" data-idx="${chap.idx}">${isLocal}${chap.title}</a></li>`;
+                });
+                html += '</ul></div>';
+            });
+            container.innerHTML = html;
+        }
+
+        function toggleVolume(vol) {
+            expandedVolumes[vol] = !expandedVolumes[vol];
+            const list = document.getElementById(`vol-${vol}`);
+            if (list) list.classList.toggle('show');
+            renderChapterList();
+        }
+
+        function searchChapters() {
+            const query = document.getElementById('chapterSearch').value.toLowerCase();
+            document.querySelectorAll('.chapter-list li a').forEach(link => {
+                const text = link.textContent.toLowerCase();
+                link.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        function extractContent(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // 检查是否是错误页面
+            const title = doc.querySelector('title')?.textContent || '';
+            if (title.includes('Page not found') || title.includes('GitHub Pages')) {
+                return null;
+            }
+
+            const content = doc.querySelector('section.normal') || doc.querySelector('.page-inner');
+            if (content) {
+                let text = content.innerHTML;
+                text = text.replace(/<div class="divider">.*?<\/div>/g, '<div class="divider">※ ※ ※</div>');
+                text = text.replace(/<script[^>]*>[\s\S]*?<\/script>/g, '');
+                text = text.replace(/<footer[^>]*>[\s\S]*?<\/footer>/g, '');
+                text = text.replace(/<nav[^>]*>[\s\S]*?<\/nav>/g, '');
+                return text;
+            }
+            return null;
+        }
+
+        function loadChapter(idx) {
+            currentChapter = idx;
+            const chap = chapters[idx];
+            if (!chap) return;
+
+            document.getElementById('welcomePanel').style.display = 'none';
+            document.getElementById('articlePanel').classList.add('show');
+            document.getElementById('articleTitle').textContent = chap.title;
+            document.getElementById('articleMeta').textContent = '';
+            document.getElementById('articleContent').innerHTML = '<div class="loading"><spinner></spinner><p>正在加载章节...</p></div>';
+
+            document.querySelectorAll('.chapter-list a').forEach(a => a.classList.remove('active'));
+            document.querySelector(`.chapter-list a[data-idx="${idx}"]`)?.classList.add('active');
+
+            // 直接从本地加载
+            fetch(`novel_content/${chap.file}`)
+                .then(r => {
+                    if (!r.ok) throw new Error('文件不存在');
+                    return r.text();
+                })
+                .then(html => {
+                    const content = extractContent(html);
+                    if (content) {
+                        document.getElementById('articleContent').innerHTML = content;
+                        renderNav();
+                    } else {
+                        document.getElementById('articleContent').innerHTML = '<p>章节内容解析失败。</p>';
+                    }
+                })
+                .catch(e => {
+                    document.getElementById('articleContent').innerHTML = `<p>加载失败：${e.message}</p>`;
+                });
+
+            closePanels();
+            window.scrollTo(0, 0);
+        }
+
+        function renderNav() {
+            const nav = document.getElementById('chapterNav');
+            const prev = currentChapter > 0
+                ? `<a href="#" onclick="loadChapter(${currentChapter-1});return false;">← 上一章</a>`
+                : '<span class="btn disabled">← 上一章</span>';
+            const next = currentChapter < chapters.length - 1
+                ? `<a href="#" onclick="loadChapter(${currentChapter+1});return false;">下一章 →</a>`
+                : '<span class="btn disabled">下一章 →</span>';
+            nav.innerHTML = prev + next;
+            document.getElementById('headerTitle').textContent = chapters[currentChapter]?.title || '苍玄大陆';
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('settingsPanel').classList.remove('open');
+        }
+
+        function toggleSettings() {
+            document.getElementById('settingsPanel').classList.toggle('open');
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('sidebar').classList.remove('open');
+        }
+
+        function closePanels() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('settingsPanel').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.theme-${theme}`)?.classList.add('active');
+        }
+
+        function setFontSize(size) {
+            const sizes = { small: '16px', medium: '18px', large: '20px', xlarge: '22px' };
+            document.documentElement.style.setProperty('--font-size', sizes[size]);
+            localStorage.setItem('fontSize', size);
+            document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
+            // 找到对应按钮并激活
+            const btnMap = { small: 0, medium: 1, large: 2, xlarge: 3 };
+            document.querySelectorAll('.font-btn')[btnMap[size]]?.classList.add('active');
+        }
+
+        function loadSettings() {
+            const theme = localStorage.getItem('theme') || 'light';
+            const fontSize = localStorage.getItem('fontSize') || 'medium';
+            setTheme(theme);
+            setFontSize(fontSize);
+        }
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById('progressBar').style.width = (scrollTop / scrollHeight) * 100 + '%';
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closePanels();
+            if (e.key === 'ArrowLeft' && currentChapter > 0) loadChapter(currentChapter - 1);
+            if (e.key === 'ArrowRight' && currentChapter < chapters.length - 1) loadChapter(currentChapter + 1);
+        });
+
+        init();
+    </script>
+</body>
+</html>
