@@ -38,177 +38,204 @@
             max-width: 1200px; margin: 0 auto;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .header h1 { font-size: 1.2rem; color: var(--primary-color); }
+        .header h1 { font-size: 1.2rem; color: var(--primary-color); cursor: pointer; }
         .header-actions { display: flex; gap: 10px; }
         .btn {
             padding: 8px 16px; border: none; border-radius: 6px;
             cursor: pointer; font-size: 14px; transition: all 0.2s;
             background: var(--bg-color); color: var(--text-color);
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .btn:hover { background: var(--primary-color); color: #fff; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-icon { padding: 8px 12px; background: transparent; border: 1px solid var(--border-color); }
         .sidebar {
-            position: fixed; top: 60px; left: -320px; width: 320px;
+            position: fixed; top: 60px; left: -350px; width: 350px;
             height: calc(100vh - 60px); background: var(--card-bg);
             box-shadow: var(--shadow); overflow-y: auto;
-            transition: left 0.3s ease; z-index: 999; padding: 20px 0;
+            transition: left 0.3s ease; z-index: 999; padding: 15px 0;
         }
         .sidebar.open { left: 0; }
         .sidebar h3 { padding: 0 20px; margin-bottom: 15px; font-size: 1rem; color: var(--primary-color); }
-        .volume-group { margin: 10px 0; }
-        .volume-title {
-            padding: 10px 20px; font-weight: bold; cursor: pointer;
-            background: rgba(44,82,130,0.1); color: var(--primary-color);
-            display: flex; justify-content: space-between; align-items: center;
+        .search-box { padding: 0 20px 15px; }
+        .search-box input {
+            width: 100%; padding: 10px 15px; border: 1px solid var(--border-color);
+            border-radius: 8px; background: var(--bg-color); color: var(--text-color);
+            font-size: 14px;
         }
-        .volume-title:hover { background: rgba(44,82,130,0.2); }
-        .vol-count { font-size: 0.8rem; opacity: 0.7; }
+        .search-box input:focus { outline: 2px solid var(--primary-color); border-color: transparent; }
+        .volume-group { margin: 8px 0; }
+        .volume-title {
+            padding: 12px 20px; font-weight: bold; cursor: pointer;
+            background: rgba(44,82,130,0.08); color: var(--primary-color);
+            display: flex; justify-content: space-between; align-items: center;
+            border-radius: 6px; margin: 4px 15px;
+        }
+        .volume-title:hover { background: rgba(44,82,130,0.15); }
+        .vol-count { font-size: 0.75rem; opacity: 0.7; font-weight: normal; }
         .chapter-list { list-style: none; display: none; }
         .chapter-list.show { display: block; }
         .chapter-list li a {
-            display: block; padding: 8px 20px 8px 30px;
+            display: block; padding: 8px 20px 8px 35px;
             color: var(--text-color); text-decoration: none;
-            font-size: 0.9rem; transition: background 0.2s;
+            font-size: 0.85rem; transition: background 0.2s;
+            border-radius: 4px; margin: 2px 15px;
         }
-        .chapter-list li a:hover, .chapter-list li a.active {
-            background: var(--primary-color); color: #fff;
+        .chapter-list li a:hover { background: rgba(44,82,130,0.1); }
+        .chapter-list li a.active { background: var(--primary-color); color: #fff; }
+        .chapter-list li a .local-indicator {
+            display: inline-block; width: 6px; height: 6px;
+            background: #48bb78; border-radius: 50%; margin-right: 6px;
         }
         .overlay {
             display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5); z-index: 998;
+            background: rgba(0,0,0,0.5); z-index: 998; opacity: 0;
+            transition: opacity 0.3s;
         }
-        .overlay.show { display: block; }
+        .overlay.show { display: block; opacity: 1; }
         .main { max-width: 900px; margin: 80px auto 40px; padding: 0 20px; }
         .welcome {
-            background: var(--card-bg); border-radius: 12px;
+            background: var(--card-bg); border-radius: 16px;
             padding: 60px 40px; box-shadow: var(--shadow); text-align: center;
         }
-        .welcome h2 { font-size: 2rem; color: var(--primary-color); margin-bottom: 20px; }
-        .welcome p { font-size: 1.1rem; color: #666; margin-bottom: 30px; }
-        .welcome-actions { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .welcome h2 { font-size: 2rem; color: var(--primary-color); margin-bottom: 15px; }
+        .welcome .subtitle { font-size: 1rem; color: #666; margin-bottom: 30px; }
+        .welcome-actions { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 25px; }
+        .welcome-stats {
+            font-size: 0.9rem; color: #888;
+            background: var(--bg-color); padding: 15px 25px;
+            border-radius: 8px; display: inline-block;
+        }
         .article {
-            background: var(--card-bg); border-radius: 12px;
-            padding: 40px; box-shadow: var(--shadow); margin-bottom: 30px;
+            background: var(--card-bg); border-radius: 16px;
+            padding: 50px 40px; box-shadow: var(--shadow); margin-bottom: 30px;
             display: none;
         }
         .article.show { display: block; }
         .article-header {
-            text-align: center; margin-bottom: 40px;
-            padding-bottom: 20px; border-bottom: 1px solid var(--border-color);
+            text-align: center; margin-bottom: 35px;
+            padding-bottom: 25px; border-bottom: 2px solid var(--border-color);
         }
-        .article-title { font-size: 1.8rem; color: var(--primary-color); margin-bottom: 10px; }
-        .article-meta { font-size: 0.9rem; color: #888; }
-        .article-content { text-indent: 2em; }
-        .article-content p { margin-bottom: 1.5em; }
-        .divider { text-align: center; padding: 20px 0; color: #888; letter-spacing: 0.5em; }
+        .article-title { font-size: 1.7rem; color: var(--primary-color); margin-bottom: 12px; line-height: 1.4; }
+        .article-meta { font-size: 0.85rem; color: #888; }
+        .article-content {
+            text-indent: 2em;
+            min-height: 200px;
+        }
+        .article-content p { margin-bottom: 1.5em; line-height: inherit; }
+        .article-content .divider {
+            text-align: center; padding: 25px 0;
+            color: #888; letter-spacing: 0.3em; font-size: 0.9em;
+        }
+        .article-content img { max-width: 100%; height: auto; display: block; margin: 20px auto; }
         .chapter-nav {
-            display: flex; justify-content: space-between;
-            margin-top: 40px; padding-top: 30px;
+            display: flex; justify-content: space-between; gap: 15px;
+            margin-top: 35px; padding-top: 25px;
             border-top: 1px solid var(--border-color);
         }
-        .chapter-nav a {
-            padding: 12px 24px; background: var(--primary-color);
-            color: #fff; text-decoration: none; border-radius: 6px;
-            transition: opacity 0.2s;
+        .chapter-nav .nav-btn {
+            flex: 1; padding: 14px 20px;
+            background: var(--primary-color); color: #fff;
+            text-decoration: none; border-radius: 8px;
+            text-align: center; font-weight: 500;
+            transition: all 0.2s; cursor: pointer;
+            border: none; font-size: 14px;
         }
-        .chapter-nav a:hover { opacity: 0.85; }
-        .chapter-nav a.disabled {
-            background: var(--border-color); cursor: not-allowed; opacity: 0.6;
+        .chapter-nav .nav-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .chapter-nav .nav-btn.disabled {
+            background: var(--border-color); cursor: not-allowed;
+            opacity: 0.6; transform: none;
         }
         .settings-panel {
             position: fixed; top: 60px; right: -300px; width: 280px;
             background: var(--card-bg); box-shadow: var(--shadow);
-            padding: 20px; border-radius: 12px 0 0 12px;
+            padding: 25px 20px; border-radius: 12px 0 0 12px;
             transition: right 0.3s ease; z-index: 999;
         }
         .settings-panel.open { right: 0; }
-        .settings-group { margin-bottom: 20px; }
-        .settings-group h4 { margin-bottom: 10px; font-size: 0.9rem; color: var(--primary-color); }
-        .theme-options { display: flex; gap: 10px; }
+        .settings-group { margin-bottom: 25px; }
+        .settings-group h4 {
+            margin-bottom: 12px; font-size: 0.9rem;
+            color: var(--primary-color); font-weight: 600;
+        }
+        .theme-options { display: flex; gap: 12px; }
         .theme-btn {
-            width: 40px; height: 40px; border-radius: 50%;
-            border: 2px solid var(--border-color); cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
+            width: 45px; height: 45px; border-radius: 50%;
+            border: 3px solid var(--border-color); cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
-        .theme-btn:hover, .theme-btn.active { transform: scale(1.1); border-color: var(--primary-color); }
-        .theme-light { background: #f5f5f5; }
-        .theme-dark { background: #1a202c; }
-        .theme-sepia { background: #f4ecd8; }
-        .font-size-options { display: flex; gap: 10px; }
+        .theme-btn:hover { transform: scale(1.1); }
+        .theme-btn.active { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(44,82,130,0.2); }
+        .theme-light { background: linear-gradient(135deg, #f5f5f5 50%, #fff 50%); }
+        .theme-dark { background: linear-gradient(135deg, #1a202c 50%, #2d3748 50%); }
+        .theme-sepia { background: linear-gradient(135deg, #f4ecd8 50%, #fffef5 50%); }
+        .font-size-options { display: flex; gap: 8px; }
         .font-btn {
-            flex: 1; padding: 8px; background: var(--bg-color);
-            border: 1px solid var(--border-color); border-radius: 6px;
-            cursor: pointer; transition: all 0.2s;
+            flex: 1; padding: 10px 8px; background: var(--bg-color);
+            border: 2px solid var(--border-color); border-radius: 8px;
+            cursor: pointer; transition: all 0.2s; font-size: 13px;
+            font-weight: 500;
         }
-        .font-btn:hover, .font-btn.active { background: var(--primary-color); color: #fff; }
+        .font-btn:hover { border-color: var(--primary-color); }
+        .font-btn.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
         .progress-bar {
             position: fixed; top: 0; left: 0; height: 3px;
-            background: var(--accent-color); z-index: 1001; transition: width 0.1s;
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            z-index: 1001; transition: width 0.1s; border-radius: 0 2px 2px 0;
         }
-        .loading {
-            text-align: center; padding: 40px; color: #888;
-        }
+        .loading { text-align: center; padding: 40px; color: #888; }
         .loading spinner {
             display: inline-block; width: 30px; height: 30px;
             border: 3px solid var(--border-color);
             border-top-color: var(--primary-color);
-            border-radius: 50%; animation: spin 1s linear infinite;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        @media (max-width: 768px) {
-            .article { padding: 25px 20px; }
-            .article-title { font-size: 1.4rem; }
-            .header-content h1 { font-size: 1rem; }
-            .chapter-nav { flex-direction: column; gap: 10px; }
-            .chapter-nav a { text-align: center; }
-            .sidebar { width: 100%; left: -100%; }
-        }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
-        .search-box {
-            padding: 10px 20px; margin-bottom: 10px;
-        }
-        .search-box input {
-            width: 100%; padding: 10px; border: 1px solid var(--border-color);
-            border-radius: 6px; background: var(--bg-color);
-            color: var(--text-color); font-size: 14px;
-        }
-        .search-box input:focus {
-            outline: none; border-color: var(--primary-color);
+        .error-msg {
+            text-align: center; padding: 30px;
+            color: #e53e3e; background: rgba(229,62,62,0.1);
+            border-radius: 8px; margin: 20px 0;
         }
         .status-bar {
-            padding: 10px 20px; font-size: 0.85rem;
-            color: #666; border-top: 1px solid var(--border-color);
+            padding: 15px 20px; border-top: 1px solid var(--border-color);
+            font-size: 0.8rem; color: #888; display: flex;
+            justify-content: space-between;
         }
-        .local-indicator {
-            display: inline-block; width: 8px; height: 8px;
-            border-radius: 50%; background: var(--accent-color);
-            margin-right: 5px;
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; left: -100%; }
+            .article { padding: 30px 20px; }
+            .article-title { font-size: 1.4rem; }
+            .welcome { padding: 40px 25px; }
+            .welcome h2 { font-size: 1.5rem; }
+            .chapter-nav { flex-direction: row; }
+            .settings-panel { width: 100%; right: -100%; border-radius: 12px 12px 0 0; }
         }
     </style>
 </head>
 <body>
     <div class="progress-bar" id="progressBar"></div>
+
     <header class="header">
         <div class="header-content">
-            <h1 id="headerTitle">苍玄大陆 - 小说阅读网</h1>
+            <h1 id="headerTitle" onclick="showWelcome()">📖 苍玄大陆</h1>
             <div class="header-actions">
-                <button class="btn btn-icon" onclick="toggleSidebar()" title="目录">☰</button>
-                <button class="btn btn-icon" onclick="toggleSettings()" title="设置">⚙</button>
+                <button class="btn btn-icon" onclick="toggleSidebar()" title="目录">📑</button>
+                <button class="btn btn-icon" onclick="toggleSettings()" title="设置">⚙️</button>
             </div>
         </div>
     </header>
 
     <aside class="sidebar" id="sidebar">
         <div class="search-box">
-            <input type="text" id="chapterSearch" placeholder="搜索章节..." oninput="searchChapters()">
+            <input type="text" id="chapterSearch" placeholder="🔍 搜索章节..." oninput="searchChapters()">
         </div>
         <h3>章节目录</h3>
         <div id="chapterListContainer"></div>
         <div class="status-bar">
-            本地：<span id="localCount">0</span> / 总计：<span id="totalCount">0</span>
+            <span>本地：<span id="localCount">0</span>章</span>
+            <span>总计：<span id="totalCount">0</span>章</span>
         </div>
     </aside>
 
@@ -216,11 +243,11 @@
 
     <aside class="settings-panel" id="settingsPanel">
         <div class="settings-group">
-            <h4>主题</h4>
+            <h4>阅读主题</h4>
             <div class="theme-options">
-                <button class="theme-btn theme-light active" onclick="setTheme('light')"></button>
-                <button class="theme-btn theme-dark" onclick="setTheme('dark')"></button>
-                <button class="theme-btn theme-sepia" onclick="setTheme('sepia')"></button>
+                <button class="theme-btn theme-light active" onclick="setTheme('light')" title="白天模式"></button>
+                <button class="theme-btn theme-dark" onclick="setTheme('dark')" title="夜间模式"></button>
+                <button class="theme-btn theme-sepia" onclick="setTheme('sepia')" title="护眼模式"></button>
             </div>
         </div>
         <div class="settings-group">
@@ -232,47 +259,62 @@
                 <button class="font-btn" onclick="setFontSize('xlarge')">超大</button>
             </div>
         </div>
+        <div class="settings-group">
+            <h4>快捷键</h4>
+            <div style="font-size: 0.8rem; color: #888; line-height: 1.8;">
+                ← / → : 上一章/下一章<br>
+                ESC : 关闭面板<br>
+                Home : 返回首页
+            </div>
+        </div>
     </aside>
 
     <main class="main">
         <div class="welcome" id="welcomePanel">
             <h2>欢迎来到 苍玄大陆</h2>
-            <p>RE0：从零开始的异世界生活 网络小说</p>
+            <p class="subtitle">RE0：从零开始的异世界生活 网络小说</p>
             <div class="welcome-actions">
-                <button class="btn" onclick="loadChapter(0)">从第一章开始阅读</button>
-                <button class="btn" onclick="toggleSidebar()">浏览目录</button>
+                <button class="btn" onclick="loadChapter(0)">📖 从第一章开始</button>
+                <button class="btn" onclick="toggleSidebar()">📑 浏览目录</button>
             </div>
-            <p style="margin-top:30px;font-size:0.9rem;color:#888;">
-                已缓存 <span id="welcomeLocalCount">0</span> 章 · 支持在线阅读未缓存章节
-            </p>
+            <div class="welcome-stats">
+                已缓存 <strong id="welcomeLocalCount" style="color: var(--primary-color);">0</strong> 章 · 完全离线阅读
+            </div>
         </div>
 
         <article class="article" id="articlePanel">
             <header class="article-header">
                 <h1 class="article-title" id="articleTitle"></h1>
-                <div class="article-meta">
-                    <span id="articleMeta"></span>
-                </div>
+                <div class="article-meta" id="articleMeta"></div>
             </header>
             <div class="article-content" id="articleContent">
-                <div class="loading"><spinner></spinner><p>正在加载章节...</p></div>
+                <div class="loading"><spinner></spinner><p style="margin-top: 15px;">正在加载章节...</p></div>
             </div>
-            <div class="chapter-nav" id="chapterNav"></div>
+            <nav class="chapter-nav" id="chapterNav">
+                <button class="nav-btn" id="prevBtn" onclick="prevChapter()">← 上一章</button>
+                <button class="nav-btn" id="nextBtn" onclick="nextChapter()">下一章 →</button>
+            </nav>
         </article>
     </main>
 
     <script>
         let chapters = [];
         let localFiles = {};
-        let currentChapter = 0;
+        let currentChapter = -1;
         let expandedVolumes = {};
 
         const volNames = {
-            '010': '第 1 卷', '020': '第 2 卷', '021': '第 2 卷短篇',
-            '030': '第 3 卷', '040': '第 4 卷', '041': '第 4 卷短篇',
-            '050': '第 5 卷', '060': '第 6 卷', '070': '第 7 卷',
-            '080': '第 8 卷', '090': '第 9 卷', '100': '第 10 卷',
+            '010': '第 1 卷 · 王选篇', '020': '第 2 卷 · 宅邸篇', '021': '第 2 卷短篇',
+            '030': '第 3 卷 · 白鲸篇', '040': '第 4 卷 · 圣域篇', '041': '第 4 卷短篇',
+            '050': '第 5 卷 · 水门都市篇', '060': '第 6 卷 · 监视塔篇',
+            '070': '第 7 卷', '080': '第 8 卷', '090': '第 9 卷', '100': '第 10 卷',
             '999': '短篇与特别篇'
+        };
+
+        const subdirNames = {
+            'if': 'IF 线', 'short01': '短篇集 1', 'short02': '短篇集 2',
+            'short03': '短篇集 3', 'short04': '短篇集 4', 'short05': '短篇集 5',
+            'special': '特别篇'
         };
 
         // 加载章节索引
@@ -287,11 +329,9 @@
             }
         }
 
-        // 检查本地文件 - 简化版：所有章节都在本地
+        // 检查本地文件
         function checkLocalFiles() {
             let localCount = 0;
-
-            // 所有章节都标记为本地可用
             for (let idx = 0; idx < chapters.length; idx++) {
                 const chap = chapters[idx];
                 if (chap && chap.file) {
@@ -299,22 +339,17 @@
                     localCount++;
                 }
             }
-
             document.getElementById('localCount').textContent = localCount;
             document.getElementById('totalCount').textContent = chapters.length;
             document.getElementById('welcomeLocalCount').textContent = localCount;
-
-            // 重新渲染目录显示本地标记
-            renderChapterList();
-
             return localCount;
         }
 
         function init() {
             loadChapterIndex().then(() => {
+                checkLocalFiles();
                 renderChapterList();
                 loadSettings();
-                checkLocalFiles();
             });
         }
 
@@ -342,11 +377,25 @@
 
                 volumes[vol].forEach(chap => {
                     const isLocal = localFiles[chap.idx] ? '<span class="local-indicator"></span>' : '';
-                    html += `<li><a href="#" onclick="loadChapter(${chap.idx}); return false;" data-idx="${chap.idx}">${isLocal}${chap.title}</a></li>`;
+                    const chapterTitle = formatChapterTitle(chap);
+                    html += `<li><a href="#" onclick="loadChapter(${chap.idx}); return false;" data-idx="${chap.idx}">${isLocal}${chapterTitle}</a></li>`;
                 });
                 html += '</ul></div>';
             });
             container.innerHTML = html;
+        }
+
+        function formatChapterTitle(chap) {
+            let title = chap.title;
+            // 如果标题已经包含章节号，直接使用
+            if (/^\d+\s*『/.test(title) || /^『/.test(title)) {
+                return title;
+            }
+            // 否则添加章节号
+            if (chap.subdir) {
+                return `${chap.subdir} - ${title}`;
+            }
+            return title;
         }
 
         function toggleVolume(vol) {
@@ -360,7 +409,7 @@
             const query = document.getElementById('chapterSearch').value.toLowerCase();
             document.querySelectorAll('.chapter-list li a').forEach(link => {
                 const text = link.textContent.toLowerCase();
-                link.style.display = text.includes(query) ? 'block' : 'none';
+                link.closest('li').style.display = text.includes(query) ? 'block' : 'none';
             });
         }
 
@@ -374,33 +423,54 @@
                 return null;
             }
 
-            const content = doc.querySelector('section.normal') || doc.querySelector('.page-inner');
+            // 尝试多种内容选择器
+            let content = doc.querySelector('section.normal')
+                       || doc.querySelector('.page-inner')
+                       || doc.querySelector('.chapter')
+                       || doc.querySelector('div[role="main"]')
+                       || doc.querySelector('article');
+
             if (content) {
                 let text = content.innerHTML;
+                // 移除脚本、页脚、导航等
                 text = text.replace(/<div class="divider">.*?<\/div>/g, '<div class="divider">※ ※ ※</div>');
                 text = text.replace(/<script[^>]*>[\s\S]*?<\/script>/g, '');
                 text = text.replace(/<footer[^>]*>[\s\S]*?<\/footer>/g, '');
                 text = text.replace(/<nav[^>]*>[\s\S]*?<\/nav>/g, '');
+                text = text.replace(/<div class="book-summary[^>]*>[\s\S]*?<\/div>/g, '');
+                text = text.replace(/<div class="header[^>]*>[\s\S]*?<\/div>/g, '');
+                // 移除空的 div
+                text = text.replace(/<div[^>]*>\s*<\/div>/g, '');
                 return text;
             }
             return null;
         }
 
         function loadChapter(idx) {
+            if (idx < 0 || idx >= chapters.length) return;
+
             currentChapter = idx;
             const chap = chapters[idx];
-            if (!chap) return;
 
             document.getElementById('welcomePanel').style.display = 'none';
             document.getElementById('articlePanel').classList.add('show');
             document.getElementById('articleTitle').textContent = chap.title;
-            document.getElementById('articleMeta').textContent = '';
-            document.getElementById('articleContent').innerHTML = '<div class="loading"><spinner></spinner><p>正在加载章节...</p></div>';
 
+            const volName = volNames[chap.vol] || `第${chap.vol}卷`;
+            const chapNum = chap.subdir ? `${chap.subdir}-${chap.num}` : chap.num;
+            document.getElementById('articleMeta').textContent = `${volName} · 第${chapNum}章`;
+
+            document.getElementById('articleContent').innerHTML = '<div class="loading"><spinner></spinner><p style="margin-top: 15px;">正在加载章节...</p></div>';
+
+            // 更新目录激活状态
             document.querySelectorAll('.chapter-list a').forEach(a => a.classList.remove('active'));
-            document.querySelector(`.chapter-list a[data-idx="${idx}"]`)?.classList.add('active');
+            const activeLink = document.querySelector(`.chapter-list a[data-idx="${idx}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+                activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
 
-            // 直接从本地加载
+            // 从本地加载
             fetch(`novel_content/${chap.file}`)
                 .then(r => {
                     if (!r.ok) throw new Error('文件不存在');
@@ -411,28 +481,59 @@
                     if (content) {
                         document.getElementById('articleContent').innerHTML = content;
                         renderNav();
+                        window.scrollTo(0, 0);
                     } else {
-                        document.getElementById('articleContent').innerHTML = '<p>章节内容解析失败。</p>';
+                        document.getElementById('articleContent').innerHTML = '<div class="error-msg">章节内容解析失败</div>';
                     }
                 })
                 .catch(e => {
-                    document.getElementById('articleContent').innerHTML = `<p>加载失败：${e.message}</p>`;
+                    document.getElementById('articleContent').innerHTML = `<div class="error-msg">加载失败：${e.message}</div>`;
                 });
 
             closePanels();
-            window.scrollTo(0, 0);
         }
 
         function renderNav() {
-            const nav = document.getElementById('chapterNav');
-            const prev = currentChapter > 0
-                ? `<a href="#" onclick="loadChapter(${currentChapter-1});return false;">← 上一章</a>`
-                : '<span class="btn disabled">← 上一章</span>';
-            const next = currentChapter < chapters.length - 1
-                ? `<a href="#" onclick="loadChapter(${currentChapter+1});return false;">下一章 →</a>`
-                : '<span class="btn disabled">下一章 →</span>';
-            nav.innerHTML = prev + next;
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            if (currentChapter > 0) {
+                prevBtn.classList.remove('disabled');
+                prevBtn.onclick = prevChapter;
+            } else {
+                prevBtn.classList.add('disabled');
+                prevBtn.onclick = null;
+            }
+
+            if (currentChapter < chapters.length - 1) {
+                nextBtn.classList.remove('disabled');
+                nextBtn.onclick = nextChapter;
+            } else {
+                nextBtn.classList.add('disabled');
+                nextBtn.onclick = null;
+            }
+
+            // 更新顶部标题
             document.getElementById('headerTitle').textContent = chapters[currentChapter]?.title || '苍玄大陆';
+        }
+
+        function prevChapter() {
+            if (currentChapter > 0) {
+                loadChapter(currentChapter - 1);
+            }
+        }
+
+        function nextChapter() {
+            if (currentChapter < chapters.length - 1) {
+                loadChapter(currentChapter + 1);
+            }
+        }
+
+        function showWelcome() {
+            document.getElementById('welcomePanel').style.display = 'block';
+            document.getElementById('articlePanel').style.display = 'none';
+            closePanels();
+            window.scrollTo(0, 0);
         }
 
         function toggleSidebar() {
@@ -465,7 +566,6 @@
             document.documentElement.style.setProperty('--font-size', sizes[size]);
             localStorage.setItem('fontSize', size);
             document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
-            // 找到对应按钮并激活
             const btnMap = { small: 0, medium: 1, large: 2, xlarge: 3 };
             document.querySelectorAll('.font-btn')[btnMap[size]]?.classList.add('active');
         }
@@ -480,13 +580,15 @@
         window.addEventListener('scroll', () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            document.getElementById('progressBar').style.width = (scrollTop / scrollHeight) * 100 + '%';
+            const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+            document.getElementById('progressBar').style.width = progress + '%';
         });
 
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') closePanels();
-            if (e.key === 'ArrowLeft' && currentChapter > 0) loadChapter(currentChapter - 1);
-            if (e.key === 'ArrowRight' && currentChapter < chapters.length - 1) loadChapter(currentChapter + 1);
+            if (e.key === 'Home') showWelcome();
+            if (e.key === 'ArrowLeft') prevChapter();
+            if (e.key === 'ArrowRight') nextChapter();
         });
 
         init();
