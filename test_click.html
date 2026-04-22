@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>点击测试</title>
+    <style>
+        body { background: #1a1a2e; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; flex-direction: column; }
+        .btn { padding: 15px 30px; font-size: 18px; background: #ffd700; border: none; border-radius: 8px; cursor: pointer; margin: 10px; }
+        .result { margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>点击测试</h1>
+    <button class="btn" data-action="test1">测试按钮 1</button>
+    <button class="btn" data-action="test2">测试按钮 2</button>
+    <button class="btn" data-action="test3" data-id="hero1">测试按钮 3 (带 data-id)</button>
+    <div class="result" id="result">点击任意按钮查看结果</div>
+
+    <script>
+        // 模拟游戏对象
+        const game = {
+            testCount: 0,
+            test1: function() {
+                this.testCount++;
+                document.getElementById('result').textContent = '测试 1 被点击了 ' + this.testCount + ' 次!';
+            },
+            test2: function() {
+                document.getElementById('result').textContent = '测试 2 被点击了!';
+            },
+            test3: function(id) {
+                document.getElementById('result').textContent = '测试 3 被点击了! data-id: ' + id;
+            }
+        };
+
+        // 事件委托
+        document.addEventListener('click', (e) => {
+            const actionBtn = e.target.closest('[data-action]');
+            if (actionBtn) {
+                e.preventDefault();
+                const action = actionBtn.dataset.action;
+                const id = actionBtn.dataset.id;
+                console.log('Clicked:', action, id);
+
+                if (action === 'test1') game.test1();
+                else if (action === 'test2') game.test2();
+                else if (action === 'test3') game.test3(id);
+            }
+        });
+    </script>
+</body>
+</html>
