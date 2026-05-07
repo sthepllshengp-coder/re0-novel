@@ -127,6 +127,96 @@
         }
         #realmText { color: #ffd700; font-weight: bold; text-align: center; margin-top: 5px; }
 
+        /* Boss 血条 */
+        #bossBar {
+            position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
+            width: 400px; max-width: 80%; display: none;
+            flex-direction: column; align-items: center; z-index: 30;
+        }
+        #bossBar.active { display: flex; }
+        #bossName { color: #ff4444; font-size: 18px; font-weight: bold; margin-bottom: 5px; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
+        #bossHpBar { width: 100%; height: 12px; background: #333; border-radius: 6px; overflow: hidden; border: 1px solid #ff4444; }
+        #bossHpFill { height: 100%; background: linear-gradient(90deg, #ff0000, #ff6600); width: 100%; transition: width 0.2s; }
+
+        /* 击杀计数器 */
+        #killCounter {
+            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+            color: #ffd700; font-size: 16px; font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); z-index: 30;
+        }
+
+        /* 连击显示 */
+        #comboDisplay {
+            position: absolute; bottom: 80px; right: 20px;
+            font-size: 28px; font-weight: bold; color: #ff8800;
+            text-shadow: 0 0 15px rgba(255, 136, 0, 0.8);
+            z-index: 30; display: none;
+        }
+        #comboDisplay.active { display: block; }
+        #comboCount { font-size: 48px; color: #ffdd00; }
+
+        /* 波次指示器 */
+        #waveIndicator {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 48px; color: #ffd700; font-weight: bold;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            z-index: 200; display: none; pointer-events: none;
+            animation: waveIn 2s ease-out forwards;
+        }
+        #waveIndicator.active { display: block; }
+        @keyframes waveIn {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+            30% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            70% { opacity: 1; }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+
+        /* 波次进度条 */
+        #waveProgress {
+            position: absolute; top: 90px; left: 50%; transform: translateX(-50%);
+            width: 300px; max-width: 60%; display: none; z-index: 30;
+        }
+        #waveProgress.active { display: block; }
+        #waveProgressText { color: #aaa; font-size: 12px; text-align: center; margin-bottom: 3px; }
+        #waveProgressBar { width: 100%; height: 6px; background: #333; border-radius: 3px; overflow: hidden; }
+        #waveProgressFill { height: 100%; background: linear-gradient(90deg, #ffd700, #ff8c00); width: 0%; transition: width 0.3s; }
+
+        /* 小地图 */
+        #minimapCanvas {
+            position: absolute; bottom: 80px; right: 10px;
+            width: 150px; height: 150px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #ffd700; border-radius: 8px;
+            z-index: 30;
+        }
+
+        /* 增益道具提示 */
+        #powerupText {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 32px; font-weight: bold; color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+            z-index: 200; pointer-events: none; opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        #powerupText.active { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+
+        /* FPS 计数器 */
+        #fpsCounter {
+            position: absolute; bottom: 80px; left: 10px;
+            color: #00ff88; font-size: 12px; font-family: monospace;
+            z-index: 30; text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+        }
+
+        /* 屏幕震动 */
+        .screen-shake { animation: shake 0.15s ease-out; }
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-5px, 3px); }
+            50% { transform: translate(4px, -4px); }
+            75% { transform: translate(-3px, 2px); }
+            100% { transform: translate(0, 0); }
+        }
+
         /* 移动端控制 */
         #mobileControls {
             position: absolute;
@@ -208,6 +298,39 @@
         <canvas id="gameCanvas" width="1024" height="768"></canvas>
         <div id="damageNumbers"></div>
 
+        <!-- Boss 血条 -->
+        <div id="bossBar">
+            <div id="bossName"></div>
+            <div id="bossHpBar"><div id="bossHpFill"></div></div>
+        </div>
+
+        <!-- 波次进度 -->
+        <div id="waveProgress">
+            <div id="waveProgressText">第 1 波</div>
+            <div id="waveProgressBar"><div id="waveProgressFill"></div></div>
+        </div>
+
+        <!-- 击杀计数 -->
+        <div id="killCounter">击杀: <span id="killCount">0</span></div>
+
+        <!-- 连击显示 -->
+        <div id="comboDisplay">
+            <div id="comboCount">0</div>
+            <div>连击</div>
+        </div>
+
+        <!-- 波次提示 -->
+        <div id="waveIndicator"></div>
+
+        <!-- 增益道具提示 -->
+        <div id="powerupText"></div>
+
+        <!-- FPS 计数器 -->
+        <div id="fpsCounter"></div>
+
+        <!-- 小地图 -->
+        <canvas id="minimapCanvas" width="150" height="150"></canvas>
+
         <!-- 移动端控制 -->
         <div id="mobileControls">
             <div id="virtualJoystick">
@@ -225,11 +348,32 @@
             <button class="btn" id="pauseRestartBtn">🔄 重新开始</button>
         </div>
 
+        <!-- 跳过休息波次 -->
+        <button id="skipWaveBtn" style="display:none; position:absolute; bottom:100px; left:50%; transform:translateX(-50%); z-index:40; padding:10px 30px; font-size:18px; background:linear-gradient(135deg,#ffd700,#ff8c00); border:none; border-radius:10px; color:#000; cursor:pointer; font-weight:bold;">⏩ 跳过休息</button>
+
         <div id="startScreen">
             <h1>修仙田园录</h1>
-            <p style="color:#aaa; margin-bottom:30px; font-size:18px;">Roguelike 修仙 Survivor</p>
+            <p style="color:#aaa; margin-bottom:20px; font-size:18px;">Roguelike 修仙 Survivor</p>
             <button class="btn" id="startBtn">开始游戏</button>
-            <p style="color:#666; margin-top:20px; font-size:14px;">WASD/方向键移动 | 自动攻击 | 每 10 级境界突破</p>
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button class="diff-btn" data-diff="easy" style="padding:8px 20px; font-size:14px; background:rgba(0,255,0,0.2); border:1px solid #0f0; border-radius:6px; color:#0f0; cursor:pointer;">简单</button>
+                <button class="diff-btn" data-diff="normal" style="padding:8px 20px; font-size:14px; background:rgba(255,215,0,0.2); border:1px solid #ffd700; border-radius:6px; color:#ffd700; cursor:pointer;">普通</button>
+                <button class="diff-btn" data-diff="hard" style="padding:8px 20px; font-size:14px; background:rgba(255,0,0,0.2); border:1px solid #f00; border-radius:6px; color:#f00; cursor:pointer;">困难</button>
+            </div>
+            <p style="color:#666; font-size:12px; margin-top:5px;">选择难度后开始游戏</p>
+            <div style="color:#aaa; font-size:14px; margin-top:20px; text-align:left; max-width:500px; line-height:1.8;">
+                <p style="color:#ffd700; font-weight:bold; margin-bottom:5px;">📖 操作指南</p>
+                <p>⌨️ WASD / 方向键 — 移动角色</p>
+                <p>⚔️ 技能自动释放，寻找最近敌人攻击</p>
+                <p>📈 升级获得属性提升，每 10 级选择天赋</p>
+                <p>🌊 击杀满一定数量触发 Boss 战</p>
+                <p>💀 Boss 战后进入休息波次，恢复 30% 生命</p>
+                <p>⌨️ 空格键 — 跳过休息波次</p>
+                <p>🔥 连击越高，暴击率和伤害加成越高</p>
+                <p>🗺️ 右下角小地图 — 查看周围敌人</p>
+                <p>⌨️ ESC — 暂停游戏</p>
+            </div>
+            <p id="highScoreText" style="color:#ffd700; margin-top:15px; font-size:16px;"></p>
         </div>
 
         <div id="heroSelectScreen" class="hidden">
@@ -277,32 +421,32 @@
 
     <script>
         const HEROES = [
-            {id:'h01',name:'枪手',type:'agility',avatar:'🤠',desc:'远程攻击，高攻速',baseStats:{hp:80,atk:15,spd:1.2,range:200},skills:['quick_shot','piercing_shot','trap']},
-            {id:'h02',name:'魔剑士',type:'magic',avatar:'🧙',desc:'魔法近战，平衡型',baseStats:{hp:100,atk:18,spd:1.0,range:60},skills:['magic_strike','lightning','cleave']},
-            {id:'h03',name:'狂战士',type:'power',avatar:'👹',desc:'高血量，高伤害',baseStats:{hp:150,atk:22,spd:0.8,range:50},skills:['whirlwind','shield_bash','combo_strike']},
-            {id:'h04',name:'刺客',type:'agility',avatar:'🥷',desc:'高暴击，高闪避',baseStats:{hp:70,atk:25,spd:1.3,range:50},skills:['backstab','quick_shot','trap']},
-            {id:'h05',name:'法师',type:'magic',avatar:'🧝',desc:'远程魔法，高伤害',baseStats:{hp:60,atk:30,spd:0.9,range:250},skills:['fireball','meteor','lightning']},
-            {id:'h06',name:'骑士',type:'power',avatar:'🛡️',desc:'高防御，稳定输出',baseStats:{hp:180,atk:16,spd:0.7,range:50},skills:['shield_bash','cleave','whirlwind']},
-            {id:'h07',name:'弓箭手',type:'agility',avatar:'🏹',desc:'超远射程，精准打击',baseStats:{hp:75,atk:20,spd:1.1,range:300},skills:['quick_shot','piercing_shot','backstab']},
-            {id:'h08',name:'术士',type:'magic',avatar:'🧛',desc:'持续伤害，吸血',baseStats:{hp:85,atk:24,spd:0.85,range:180},skills:['curse','fireball','lightning']},
-            {id:'h09',name:'武僧',type:'power',avatar:'👊',desc:'连击，高攻速',baseStats:{hp:120,atk:18,spd:1.1,range:45},skills:['combo_strike','whirlwind','cleave']},
-            {id:'h10',name:'猎人',type:'agility',avatar:'🎯',desc:'陷阱，控制敌人',baseStats:{hp:90,atk:19,spd:1.0,range:220},skills:['trap','piercing_shot','quick_shot']},
+            {id:'h01',name:'枪手',type:'agility',avatar:'🤠',desc:'远程攻击，高攻速',baseStats:{hp:120,atk:15,spd:1.2,range:200},skills:['quick_shot','piercing_shot','trap']},
+            {id:'h02',name:'魔剑士',type:'magic',avatar:'🧙',desc:'魔法近战，平衡型',baseStats:{hp:140,atk:18,spd:1.0,range:60},skills:['magic_strike','lightning','cleave']},
+            {id:'h03',name:'狂战士',type:'power',avatar:'👹',desc:'高血量，高伤害',baseStats:{hp:200,atk:22,spd:0.8,range:50},skills:['whirlwind','shield_bash','combo_strike']},
+            {id:'h04',name:'刺客',type:'agility',avatar:'🥷',desc:'高暴击，高闪避',baseStats:{hp:100,atk:25,spd:1.3,range:50},skills:['backstab','quick_shot','trap']},
+            {id:'h05',name:'法师',type:'magic',avatar:'🧝',desc:'远程魔法，高伤害',baseStats:{hp:90,atk:30,spd:0.9,range:250},skills:['fireball','meteor','lightning']},
+            {id:'h06',name:'骑士',type:'power',avatar:'🛡️',desc:'高防御，稳定输出',baseStats:{hp:230,atk:16,spd:0.7,range:50},skills:['shield_bash','cleave','whirlwind']},
+            {id:'h07',name:'弓箭手',type:'agility',avatar:'🏹',desc:'超远射程，精准打击',baseStats:{hp:110,atk:20,spd:1.1,range:300},skills:['quick_shot','piercing_shot','backstab']},
+            {id:'h08',name:'术士',type:'magic',avatar:'🧛',desc:'持续伤害，吸血',baseStats:{hp:120,atk:24,spd:0.85,range:180},skills:['curse','fireball','lightning']},
+            {id:'h09',name:'武僧',type:'power',avatar:'👊',desc:'连击，高攻速',baseStats:{hp:150,atk:18,spd:1.1,range:45},skills:['combo_strike','whirlwind','cleave']},
+            {id:'h10',name:'猎人',type:'agility',avatar:'🎯',desc:'陷阱，控制敌人',baseStats:{hp:130,atk:19,spd:1.0,range:220},skills:['trap','piercing_shot','quick_shot']},
         ];
 
         const SKILLS = {
-            whirlwind: {id:'whirlwind',name:'旋风斩',type:'power',icon:'🌪️',damage:80,cd:2.5,range:80,area:100},
-            shield_bash: {id:'shield_bash',name:'盾击',type:'power',icon:'🛡️',damage:120,cd:3,range:60,area:60},
-            combo_strike: {id:'combo_strike',name:'连击',type:'power',icon:'👊',damage:50,cd:2,range:50,area:50},
-            cleave: {id:'cleave',name:'顺劈斩',type:'power',icon:'⚔️',damage:100,cd:2.8,range:70,area:90},
-            fireball: {id:'fireball',name:'火球术',type:'magic',icon:'🔥',damage:100,cd:2.5,range:250,area:70},
-            magic_strike: {id:'magic_strike',name:'魔法打击',type:'magic',icon:'✨',damage:70,cd:2,range:80,area:60},
-            curse: {id:'curse',name:'诅咒',type:'magic',icon:'💀',damage:40,cd:2.2,range:200,area:50},
-            lightning: {id:'lightning',name:'闪电链',type:'magic',icon:'⚡',damage:60,cd:2.8,range:220,area:80},
-            meteor: {id:'meteor',name:'流星',type:'magic',icon:'☄️',damage:150,cd:4,range:280,area:100},
-            quick_shot: {id:'quick_shot',name:'快速射击',type:'agility',icon:'🏹',damage:40,cd:2,range:250,area:40},
-            backstab: {id:'backstab',name:'背刺',type:'agility',icon:'🗡️',damage:200,cd:3,range:50,area:40},
-            piercing_shot: {id:'piercing_shot',name:'穿透射击',type:'agility',icon:'🎯',damage:80,cd:2.5,range:300,area:40},
-            trap: {id:'trap',name:'陷阱',type:'agility',icon:'🕸️',damage:60,cd:2.8,range:150,area:80},
+            whirlwind: {id:'whirlwind',name:'旋风斩',type:'power',icon:'🌪️',damage:50,cd:2.5,range:80,area:100},
+            shield_bash: {id:'shield_bash',name:'盾击',type:'power',icon:'🛡️',damage:70,cd:3,range:60,area:60},
+            combo_strike: {id:'combo_strike',name:'连击',type:'power',icon:'👊',damage:30,cd:2,range:50,area:50},
+            cleave: {id:'cleave',name:'顺劈斩',type:'power',icon:'⚔️',damage:60,cd:2.8,range:70,area:90},
+            fireball: {id:'fireball',name:'火球术',type:'magic',icon:'🔥',damage:60,cd:2.5,range:250,area:70},
+            magic_strike: {id:'magic_strike',name:'魔法打击',type:'magic',icon:'✨',damage:40,cd:2,range:80,area:60},
+            curse: {id:'curse',name:'诅咒',type:'magic',icon:'💀',damage:25,cd:2.2,range:200,area:50},
+            lightning: {id:'lightning',name:'闪电链',type:'magic',icon:'⚡',damage:40,cd:2.8,range:220,area:80},
+            meteor: {id:'meteor',name:'流星',type:'magic',icon:'☄️',damage:80,cd:4,range:280,area:100},
+            quick_shot: {id:'quick_shot',name:'快速射击',type:'agility',icon:'🏹',damage:25,cd:2,range:250,area:40},
+            backstab: {id:'backstab',name:'背刺',type:'agility',icon:'🗡️',damage:100,cd:3,range:50,area:40},
+            piercing_shot: {id:'piercing_shot',name:'穿透射击',type:'agility',icon:'🎯',damage:45,cd:2.5,range:300,area:40},
+            trap: {id:'trap',name:'陷阱',type:'agility',icon:'🕸️',damage:35,cd:2.8,range:150,area:80},
         };
 
         const SYNERGIES = {
@@ -326,12 +470,46 @@
 
         const REALMS = ['凡人','炼气','筑基','金丹','元婴','化神','合体','大乘','渡劫','真仙'];
         const MONSTER_TYPES = [
-            {id:'m1',name:'史莱姆',hp:50,atk:8,speed:1.2,color:'#00ff00',exp:10},
-            {id:'m2',name:'蝙蝠',hp:40,atk:12,speed:1.8,color:'#8b4513',exp:15},
-            {id:'m3',name:'骷髅',hp:80,atk:15,speed:1,color:'#cccccc',exp:20},
-            {id:'m4',name:'僵尸',hp:120,atk:18,speed:0.8,color:'#2d5a27',exp:30},
-            {id:'m5',name:'恶魔',hp:150,atk:22,speed:1.2,color:'#8b0000',exp:40},
-            {id:'m6',name:'兽人',hp:180,atk:25,speed:1.1,color:'#8b4513',exp:50},
+            {id:'m1',name:'史莱姆',hp:80,atk:8,speed:1.2,color:'#00ff00',exp:15},
+            {id:'m2',name:'蝙蝠',hp:70,atk:12,speed:1.8,color:'#8b4513',exp:20},
+            {id:'m3',name:'骷髅',hp:120,atk:15,speed:1,color:'#cccccc',exp:20},
+            {id:'m4',name:'僵尸',hp:160,atk:18,speed:0.8,color:'#2d5a27',exp:30},
+            {id:'m5',name:'恶魔',hp:200,atk:22,speed:1.2,color:'#8b0000',exp:40},
+            {id:'m6',name:'兽人',hp:240,atk:25,speed:1.1,color:'#8b4513',exp:50},
+        ];
+        const BOSS_TYPES = [
+            {id:'b1',name:'史莱姆王',hp:500,atk:20,speed:0.8,color:'#00cc00',exp:200,size:40},
+            {id:'b2',name:'骷髅将军',hp:800,atk:35,speed:0.7,color:'#aaaaaa',exp:350,size:42},
+            {id:'b3',name:'僵尸领主',hp:1200,atk:50,speed:0.6,color:'#1a4a1a',exp:500,size:45},
+            {id:'b4',name:'恶魔领主',hp:2000,atk:70,speed:0.9,color:'#660000',exp:800,size:48},
+            {id:'b5',name:'兽人酋长',hp:3000,atk:90,speed:0.7,color:'#6b3503',exp:1200,size:50},
+            {id:'b6',name:'仙魔降世',hp:5000,atk:120,speed:1.0,color:'#ff00ff',exp:2000,size:55},
+        ];
+        const POWERUP_TYPES = [
+            {id:'p1',name:'攻击强化',icon:'⚔️',color:'#ff4444',duration:15,effect:{damage:0.3}},
+            {id:'p2',name:'防御强化',icon:'🛡️',color:'#4488ff',duration:15,effect:{def:5}},
+            {id:'p3',name:'移速强化',icon:'💨',color:'#44ff88',duration:15,effect:{speed:0.3}},
+            {id:'p4',name:'无敌',icon:'⭐',color:'#ffd700',duration:5,effect:{invincible:true}},
+            {id:'p5',name:'全属性强化',icon:'✨',color:'#ff44ff',duration:10,effect:{damage:0.2,def:3,speed:0.15}},
+        ];
+        const TERRAIN_THEMES = [
+            {name:'翠绿草原',bg:'#2d5a27',grid:'rgba(255,255,255,0.08)',tree:'#1a4a1a'},
+            {name:'荒芜沙漠',bg:'#8b7355',grid:'rgba(255,255,255,0.1)',tree:'#6b5335'},
+            {name:'火山地带',bg:'#5a1a1a',grid:'rgba(255,100,0,0.15)',tree:'#3a0a0a'},
+            {name:'冰雪荒原',bg:'#a0b8c8',grid:'rgba(255,255,255,0.2)',tree:'#80a0b8'},
+            {name:'暗影沼泽',bg:'#2a2a3a',grid:'rgba(100,0,150,0.1)',tree:'#1a1a2a'},
+            {name:'雷电高原',bg:'#4a4a5a',grid:'rgba(200,200,255,0.1)',tree:'#3a3a4a'},
+            {name:'灵雾森林',bg:'#1a3a2a',grid:'rgba(0,200,100,0.1)',tree:'#0a2a1a'},
+            {name:'熔岩裂谷',bg:'#4a1a0a',grid:'rgba(255,50,0,0.15)',tree:'#3a0a00'},
+            {name:'星空幻境',bg:'#1a1a4a',grid:'rgba(150,100,255,0.1)',tree:'#0a0a3a'},
+            {name:'仙灵天界',bg:'#2a3a5a',grid:'rgba(255,215,0,0.1)',tree:'#1a2a4a'},
+        ];
+        const ELITE_PREFIXES = [
+            {name:'精锐',color:'#ffd700',hpMult:2,atkMult:1.5,sizeMult:1.3},
+            {name:'远古',color:'#ff44ff',hpMult:3,atkMult:2,sizeMult:1.5},
+            {name:'变异',color:'#00ff88',hpMult:2.5,atkMult:1.8,sizeMult:1.4},
+            {name:'嗜血',color:'#ff0000',hpMult:1.5,atkMult:2.5,sizeMult:1.2},
+            {name:'急速',color:'#4488ff',hpMult:1.5,atkMult:1.3,sizeMult:1.2,speedMult:1.5},
         ];
 
         class Game {
@@ -352,13 +530,89 @@
                 this.cameraX = 0;
                 this.cameraY = 0;
                 this.keys = {};
-                this.spawnTimer = 0;
+                this.spawnTimer = 2000; // 初始 2 秒缓冲
                 this.spawnInterval = 1000;
+                this.spawnPauseTimer = 0; // Boss 生成时暂停刷怪
 
                 // 移动端控制
                 this.joystick = { active: false, x: 0, y: 0, originX: 0, originY: 0 };
                 this.moveInput = { x: 0, y: 0 };
                 this.paused = false;
+
+                // 粒子系统
+                this.particles = [];
+                // 屏幕震动
+                this.shakeAmount = 0;
+                this.shakeDuration = 0;
+                this.shakeTimer = 0;
+                // 波次系统
+                this.wave = 1;
+                this.waveKills = 0;
+                this.waveKillsRequired = 15;
+                this.waveTimer = 0;
+                this.waveBreak = false;
+                this.waveBreakDuration = 5;
+                // 连击系统
+                this.combo = 0;
+                this.comboTimer = 0;
+                this.comboDecayTime = 3;
+                // 击杀计数
+                this.killCount = 0;
+                this.totalDamage = 0;
+                // Boss 系统
+                this.bossActive = false;
+                this.bossEntity = null;
+                // 音效系统
+                this.audioCtx = null;
+                // 存档
+                this.loadSave();
+                // 经验球
+                this.expOrbs = [];
+                // 小地图
+                this.minimapCanvas = document.getElementById('minimapCanvas');
+                this.minimapCtx = this.minimapCanvas ? this.minimapCanvas.getContext('2d') : null;
+                // 难度
+                this.difficulty = 'normal'; // easy, normal, hard
+                // 加载上次选择的难度
+                try {
+                    const lastDiff = localStorage.getItem('xiuxian_difficulty');
+                    if (lastDiff && ['easy','normal','hard'].includes(lastDiff)) {
+                        this.difficulty = lastDiff;
+                        // 高亮对应的按钮
+                        setTimeout(() => {
+                            const btn = document.querySelector(`.diff-btn[data-diff="${lastDiff}"]`);
+                            if (btn) {
+                                btn.style.transform = 'scale(1.15)';
+                                const colors = {easy:'#0f0', normal:'#ffd700', hard:'#f00'};
+                                btn.style.boxShadow = `0 0 15px ${colors[lastDiff]}`;
+                            }
+                        }, 100);
+                    }
+                } catch(e) {}
+                // 屏幕闪光
+                this.flashColor = null;
+                this.flashAlpha = 0;
+                this.flashDuration = 0;
+                this.flashTimer = 0;
+                // 增益道具
+                this.powerups = [];
+                this.activePowerups = [];
+                this.playerHitFlash = 0;
+                // FPS
+                this.fps = 60;
+                this.fpsFrames = 0;
+                this.fpsTimer = 0;
+                // 地形主题
+                this.terrainBg = '#2d5a27';
+                this.terrainGrid = 'rgba(255,255,255,0.1)';
+                this.terrainIndex = 0;
+                // 击杀里程碑
+                this.milestones = {100:false, 500:false, 1000:false, 5000:false, 10000:false};
+                // 精英怪物标记
+                this.nextEliteWave = 5;
+                // 分数系统
+                this.score = 0;
+                this.scoreDisplay = 0;
 
                 this.setupInput();
                 this.setupButtons();
@@ -373,16 +627,53 @@
                     this.keys[e.key.toLowerCase()] = true;
                     if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
                     if (e.key === 'Escape') this.togglePause();
+                    if (e.key === ' ' && this.waveBreak) {
+                        this.waveBreak = false;
+                        this.waveBreakDuration = 5;
+                        this.waveKillsRequired = 15 + this.wave * 5;
+                        this.waveKills = 0;
+                        this.showWaveIndicator(`第 ${this.wave} 波`);
+                        this.playSound('wave');
+                    }
                 });
                 window.addEventListener('keyup', (e) => { this.keys[e.key.toLowerCase()] = false; });
             }
 
             setupButtons() {
-                document.getElementById('startBtn').addEventListener('click', () => this.showHeroSelect());
+                document.getElementById('startBtn').addEventListener('click', () => {
+                    this.initAudio();
+                    this.showHeroSelect();
+                });
                 document.getElementById('restartBtn').addEventListener('click', () => location.reload());
                 document.getElementById('pauseBtn').addEventListener('click', () => this.togglePause());
                 document.getElementById('resumeBtn').addEventListener('click', () => this.resumeGame());
                 document.getElementById('pauseRestartBtn').addEventListener('click', () => location.reload());
+                document.getElementById('skipWaveBtn').addEventListener('click', () => {
+                    this.waveBreak = false;
+                    this.waveBreakDuration = 5;
+                    this.waveKillsRequired = 15 + this.wave * 5;
+                    this.waveKills = 0;
+                    document.getElementById('skipWaveBtn').style.display = 'none';
+                });
+
+                // 难度按钮
+                document.querySelectorAll('.diff-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const diff = btn.dataset.diff;
+                        this.difficulty = diff;
+                        try { localStorage.setItem('xiuxian_difficulty', diff); } catch(e) {}
+                        document.querySelectorAll('.diff-btn').forEach(b => { b.style.transform = ''; b.style.boxShadow = ''; });
+                        btn.style.transform = 'scale(1.15)';
+                        const colors = {easy:'#0f0', normal:'#ffd700', hard:'#f00'};
+                        btn.style.boxShadow = `0 0 15px ${colors[diff]}`;
+                    });
+                });
+
+                // 显示历史最高
+                const highScore = this.getSaveHighScore();
+                if (highScore > 0) {
+                    document.getElementById('highScoreText').textContent = `🏆 历史最高击杀: ${highScore}`;
+                }
             }
 
             // ========== 移动端控制 ==========
@@ -481,6 +772,8 @@
                 document.getElementById('startScreen').classList.add('hidden');
                 document.getElementById('heroSelectScreen').classList.remove('hidden');
                 const shuffled = [...HEROES].sort(() => Math.random() - 0.5).slice(0, 5);
+                const highScore = this.getSaveHighScore();
+                const scoreText = highScore > 0 ? `<p style="color:#ffd700; margin-top:15px; font-size:14px;">历史最高击杀: ${highScore}</p>` : '';
                 document.getElementById('heroCards').innerHTML = shuffled.map(hero => `
                     <div class="hero-card" data-id="${hero.id}">
                         <div class="hero-avatar">${hero.avatar}</div>
@@ -489,7 +782,7 @@
                         <div class="hero-desc">${hero.desc}</div>
                         <div class="hero-stats">HP:${hero.baseStats.hp} ATK:${hero.baseStats.atk} SPD:${hero.baseStats.spd}</div>
                     </div>
-                `).join('');
+                `).join('') + scoreText;
                 document.querySelectorAll('.hero-card').forEach(card => {
                     card.addEventListener('click', () => this.selectHero(card.dataset.id));
                 });
@@ -499,6 +792,7 @@
             getTypeName(type) { return {power:'力量',magic:'魔法',agility:'敏捷'}[type] || type; }
 
             selectHero(heroId) {
+                this.initAudio();
                 this.hero = HEROES.find(h => h.id === heroId);
                 this.player = {
                     x: this.mapWidth/2, y: this.mapHeight/2,
@@ -510,12 +804,52 @@
                 };
                 const skillIds = this.hero.skills || ['quick_shot','fireball','whirlwind'];
                 this.skills = skillIds.map(id => ({...SKILLS[id], currentCd: 0}));
+
+                // 重置游戏状态
+                this.wave = 1;
+                this.waveKills = 0;
+                this.waveKillsRequired = 15;
+                this.waveBreak = false;
+                this.waveBreakDuration = 3;
+                this.combo = 0;
+                this.killCount = 0;
+                this.totalDamage = 0;
+                this.bossActive = false;
+                this.bossEntity = null;
+                this.spawnTimer = 2000;
+                this.spawnPauseTimer = 0;
+                this.enemies = [];
+                this.projectiles = [];
+                this.particles = [];
+                this.expOrbs = [];
+                this.powerups = [];
+                this.activePowerups = [];
+                this.talents = [];
+
+                // 重置地形、里程碑、精英、分数
+                this.terrainIndex = 0;
+                this.terrainBg = TERRAIN_THEMES[0].bg;
+                this.terrainGrid = TERRAIN_THEMES[0].grid;
+                this.milestones = {100:false, 500:false, 1000:false, 5000:false, 10000:false};
+                this.nextEliteWave = 5;
+                this.score = 0;
+                this.scoreDisplay = 0;
+
+                document.getElementById('killCount').textContent = '0';
+                document.getElementById('waveProgressText').textContent = '第 1 波';
+                document.getElementById('waveProgressFill').style.width = '0%';
+                document.getElementById('waveProgress').classList.add('active');
+
                 document.getElementById('heroSelectScreen').classList.add('hidden');
                 document.getElementById('statusPanel').classList.remove('hidden');
                 document.getElementById('skillPanel').classList.remove('hidden');
                 document.getElementById('synergyPanel').classList.remove('hidden');
                 this.state = 'playing';
                 this.updateUI();
+
+                // 显示波次提示
+                setTimeout(() => this.showWaveIndicator('第 1 波'), 500);
+                this.playSound('wave');
             }
 
             updateUI() {
@@ -553,6 +887,8 @@
 
             showTalentSelect() {
                 this.state = 'talentSelect';
+                this.playSound('levelup');
+                this.triggerFlash('#ffd700', 0.5, 0.5);
                 document.getElementById('talentSelectScreen').classList.remove('hidden');
                 document.getElementById('levelupNotify').classList.remove('hidden');
                 const selected = [...TALENTS].sort(() => Math.random() - 0.5).slice(0, 3);
@@ -574,6 +910,54 @@
                 this.applyTalentEffect(talent.effect);
                 document.getElementById('talentSelectScreen').classList.add('hidden');
                 this.state = 'playing';
+                this.updateUI();
+            }
+
+            showSkillSelect() {
+                if (this.state !== 'playing') return;
+                this.state = 'skillSelect';
+                this.playSound('levelup');
+                this.triggerFlash('#00aaff', 0.5, 0.5);
+                document.getElementById('talentSelectScreen').classList.remove('hidden');
+                document.getElementById('talentSelectScreen').querySelector('h2').textContent = '选择新技能';
+                document.getElementById('levelupNotify').classList.remove('hidden');
+
+                // 收集所有可用技能（玩家没有的）
+                const ownedSkillIds = new Set(this.skills.map(s => s.id));
+                const allSkills = Object.values(SKILLS).filter(s => !ownedSkillIds.has(s.id));
+                const selected = allSkills.sort(() => Math.random() - 0.5).slice(0, 3);
+
+                if (selected.length === 0) {
+                    document.getElementById('talentSelectScreen').classList.add('hidden');
+                    this.state = 'playing';
+                    return;
+                }
+
+                document.getElementById('talentCards').innerHTML = selected.map(skill => `
+                    <div class="talent-card" data-id="${skill.id}">
+                        <div style="font-size:40px;margin-bottom:8px;">${skill.icon}</div>
+                        <div class="talent-name">${skill.name}</div>
+                        <div class="talent-desc">伤害:${skill.damage} 范围:${skill.range} CD:${skill.cd}s</div>
+                    </div>
+                `).join('');
+
+                document.querySelectorAll('.talent-card').forEach(card => {
+                    card.addEventListener('click', () => this.selectSkill(card.dataset.id));
+                });
+                setTimeout(() => document.getElementById('levelupNotify').classList.add('hidden'), 2000);
+            }
+
+            selectSkill(skillId) {
+                const skillTemplate = SKILLS[skillId];
+                if (!skillTemplate) {
+                    this.state = 'playing';
+                    return;
+                }
+                this.skills.push({...skillTemplate, currentCd: 0});
+                document.getElementById('talentSelectScreen').classList.add('hidden');
+                document.getElementById('talentSelectScreen').querySelector('h2').textContent = '选择天赋';
+                this.state = 'playing';
+                this.playSound('levelup');
                 this.updateUI();
             }
 
@@ -599,17 +983,85 @@
                     case 2: x=this.cameraX+Math.random()*this.canvas.width; y=this.cameraY+this.canvas.height+margin; break;
                     case 3: x=this.cameraX-margin; y=this.cameraY+Math.random()*this.canvas.height; break;
                 }
-                // 难度缩放（增加系数）
-                const hpMult = 1 + this.player.level * 0.15;
-                this.enemies.push({...type, x, y, maxHp:type.hp*hpMult, currentHp:type.hp*hpMult});
+                // 难度缩放
+                const diffMult = {easy:0.7, normal:1.0, hard:1.5}[this.difficulty] || 1.0;
+                const hpMult = (1 + this.player.level * 0.15) * diffMult;
+
+                // 精英怪物（波次 >= 5 时 20% 概率）
+                let elite = null;
+                if (this.wave >= 5 && Math.random() < 0.2) {
+                    elite = ELITE_PREFIXES[Math.floor(Math.random() * ELITE_PREFIXES.length)];
+                }
+
+                const enemy = {
+                    ...type, x, y,
+                    maxHp: type.hp * hpMult,
+                    currentHp: type.hp * hpMult,
+                    atk: Math.floor(type.atk * diffMult),
+                };
+
+                // 应用精英加成
+                if (elite) {
+                    enemy.isElite = true;
+                    enemy.elitePrefix = elite.name;
+                    enemy.eliteColor = elite.color;
+                    enemy.maxHp = Math.floor(enemy.maxHp * elite.hpMult);
+                    enemy.currentHp = enemy.maxHp;
+                    enemy.atk = Math.floor(enemy.atk * elite.atkMult);
+                    enemy.sizeMult = elite.sizeMult || 1;
+                    if (elite.speedMult) enemy.speed = (enemy.speed || 1) * elite.speedMult;
+                    enemy.exp = Math.floor((enemy.exp || 10) * elite.hpMult);
+                }
+
+                this.enemies.push(enemy);
             }
 
             update(delta) {
                 if (this.state !== 'playing' || this.paused) return;
 
+                // 屏幕震动计时
+                if (this.shakeTimer < this.shakeDuration) {
+                    this.shakeTimer += delta;
+                }
+                // 屏幕闪光计时
+                if (this.flashTimer < this.flashDuration) {
+                    this.flashTimer += delta;
+                }
+
+                // 更新波次、连击、粒子
+                this.updateWave(delta);
+                this.updateCombo(delta);
+                this.updateParticles(delta);
+                this.updateExpOrbs(delta);
+                this.updatePowerups(delta);
+
+                // FPS 计数
+                this.fpsFrames++;
+                this.fpsTimer += delta;
+                if (this.fpsTimer >= 0.5) {
+                    this.fps = Math.round(this.fpsFrames / this.fpsTimer);
+                    this.fpsFrames = 0;
+                    this.fpsTimer = 0;
+                    const fpsEl = document.getElementById('fpsCounter');
+                    if (fpsEl && this.state === 'playing') {
+                        fpsEl.textContent = `${this.fps} FPS | ${this.enemies.length} 敌 | ${this.expOrbs.length} 经验球`;
+                    }
+                }
+
+                // 玩家受击闪白
+                if (this.playerHitFlash > 0) {
+                    this.playerHitFlash -= delta;
+                }
+
                 const speed = 200;
                 let moveX = 0;
                 let moveY = 0;
+
+                // 移速增益
+                let speedMult = 1;
+                this.activePowerups.forEach(ap => {
+                    if (ap.speedBonus) speedMult += ap.speedBonus;
+                });
 
                 // 键盘输入
                 if (this.keys['w']||this.keys['arrowup']) moveY -= 1;
@@ -630,15 +1082,22 @@
                     moveY /= len;
                 }
 
-                this.player.x += moveX * speed * delta;
-                this.player.y += moveY * speed * delta;
+                this.player.x += moveX * speed * speedMult * delta;
+                this.player.y += moveY * speed * speedMult * delta;
                 this.player.x = Math.max(0, Math.min(this.mapWidth, this.player.x));
                 this.player.y = Math.max(0, Math.min(this.mapHeight, this.player.y));
                 this.cameraX = this.player.x - this.canvas.width/2;
                 this.cameraY = this.player.y - this.canvas.height/2;
+
+                // 暂停刷怪计时
+                if (this.spawnPauseTimer > 0) this.spawnPauseTimer -= delta;
+
                 this.spawnTimer += delta*1000;
-                const adjustedSpawnRate = Math.max(200, this.spawnInterval - this.player.level*20);
-                if (this.spawnTimer >= adjustedSpawnRate && this.enemies.length < 50+this.player.level*5) {
+                const spawnRateMult = {easy:1.3, normal:1.0, hard:0.7}[this.difficulty] || 1.0;
+                const adjustedSpawnRate = Math.max(200, (this.spawnInterval - this.player.level*20) * spawnRateMult);
+                const maxEnemies = 50 + this.player.level * 5;
+                // 波次休息或暂停时不生成敌人
+                if (!this.waveBreak && this.spawnPauseTimer <= 0 && this.spawnTimer >= adjustedSpawnRate && this.enemies.length < maxEnemies && !this.bossActive) {
                     this.spawnEnemy();
                     this.spawnTimer = 0;
                 }
@@ -649,40 +1108,190 @@
                     }
                 });
                 this.autoAttack();
-                this.projectiles.forEach(proj => { proj.x += proj.vx*delta; proj.y += proj.vy*delta; proj.life -= delta; });
+                this.projectiles.forEach(proj => {
+                    proj.x += proj.vx*delta; proj.y += proj.vy*delta; proj.life -= delta;
+                    // 轨迹粒子
+                    if (Math.random() < 0.3) {
+                        this.spawnParticles(proj.x, proj.y, proj.trailColor || '#ff0', 1, 10, 2);
+                    }
+                });
                 this.projectiles = this.projectiles.filter(p => p.life > 0);
+                // 性能保护：限制投射物数量
+                if (this.projectiles.length > 100) {
+                    this.projectiles = this.projectiles.slice(-100);
+                }
+                // 性能保护：限制经验球数量
+                if (this.expOrbs.length > 200) {
+                    this.expOrbs = this.expOrbs.slice(-200);
+                }
                 this.enemies.forEach(enemy => {
                     const dx = this.player.x - enemy.x, dy = this.player.y - enemy.y;
                     const dist = Math.sqrt(dx*dx + dy*dy);
 
-                    // AI：随机游走 + 追踪
-                    const shouldChase = Math.random() > 0.3 || dist < 150; // 70% 概率追踪，或距离近时必定追踪
+                    // Boss 特殊行为
+                    if (enemy.isBoss) {
+                        // 始终追踪玩家
+                        if (dist > 0) {
+                            enemy.x += (dx/dist)*enemy.speed*60*delta;
+                            enemy.y += (dy/dist)*enemy.speed*60*delta;
+                        }
 
-                    if (shouldChase && dist > 0) {
-                        enemy.x += (dx/dist)*enemy.speed*50*delta;
-                        enemy.y += (dy/dist)*enemy.speed*50*delta;
+                        // Boss 攻击
+                        enemy.attackTimer = (enemy.attackTimer || 0) + delta;
+                        if (enemy.attackTimer >= enemy.attackInterval) {
+                            enemy.attackTimer = 0;
+                            // 近战攻击（距离近时）或远程投射物（距离远时）
+                            if (dist < 80) {
+                                const damage = Math.max(1, Math.floor(enemy.atk * 1.5) - this.player.def);
+                                this.player.hp -= damage;
+                                this.triggerShake(5, 0.3);
+                                this.playSound('hit');
+                            } else if (dist < 500 && Math.random() < 0.6) {
+                                // 远程攻击：向玩家发射投射物
+                                const angle = Math.atan2(this.player.y - enemy.y, this.player.x - enemy.x);
+                                const speed = 200;
+                                this.projectiles.push({
+                                    x: enemy.x, y: enemy.y,
+                                    vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+                                    damage: enemy.atk * 0.5, area: 30,
+                                    life: 2, hit: false, icon: '💀',
+                                    trailColor: '#ff0000',
+                                    isEnemy: true
+                                });
+                            }
+                        }
+
+                        // Boss 定期冲刺
+                        enemy.phase = enemy.phase || 0;
+                        enemy.phase += delta * 0.1;
+                        if (enemy.phase > Math.PI * 2) enemy.phase = 0;
+                        const sprintBonus = Math.sin(enemy.phase) > 0.8 ? 2 : 1;
+                        if (dist > 0) {
+                            enemy.x += (dx/dist)*enemy.speed*60*delta * (sprintBonus - 1) * 0.5;
+                            enemy.y += (dy/dist)*enemy.speed*60*delta * (sprintBonus - 1) * 0.5;
+                        }
+
+                        // Boss 狂暴（HP < 30%）
+                        const hpPercent = Math.max(0, enemy.currentHp / enemy.maxHp);
+                        if (hpPercent < 0.3 && !enemy.enraged) {
+                            enemy.enraged = true;
+                            enemy.speed *= 1.5;
+                            enemy.atk *= 1.5;
+                            enemy.attackInterval *= 0.6;
+                            this.triggerFlash('#ff0000', 0.5, 0.3);
+                            document.getElementById('bossName').textContent = '🔥 ' + document.getElementById('bossName').textContent + ' 🔥';
+                            this.showWaveIndicator('🔥 BOSS 狂暴了！🔥');
+                            this.playSound('boss');
+                        }
+
+                        // 更新 Boss 血条
+                        document.getElementById('bossHpFill').style.width = (hpPercent * 100) + '%';
                     } else {
-                        // 随机游走
-                        enemy.x += (Math.random() - 0.5) * 30 * delta;
-                        enemy.y += (Math.random() - 0.5) * 30 * delta;
+                        // 普通怪物 AI：随机游走 + 追踪
+                        const shouldChase = Math.random() > 0.3 || dist < 150;
+                        if (shouldChase && dist > 0) {
+                            enemy.x += (dx/dist)*enemy.speed*50*delta;
+                            enemy.y += (dy/dist)*enemy.speed*50*delta;
+                        } else {
+                            enemy.x += (Math.random() - 0.5) * 30 * delta;
+                            enemy.y += (Math.random() - 0.5) * 30 * delta;
+                        }
                     }
 
-                    if (dist < 30) { const damage = Math.max(1, enemy.atk - this.player.def); this.player.hp -= damage*delta; }
+                    if (dist < 30) {
+                        const isInvincible = this.activePowerups.some(ap => ap.effect.invincible);
+                        if (!isInvincible) {
+                            // 普通怪物改为周期性攻击（非持续伤害）
+                            if (!enemy.attackTimer) enemy.attackTimer = 0;
+                            enemy.attackTimer += delta;
+                            if (enemy.attackTimer >= 1.0) { // 每秒攻击一次
+                                enemy.attackTimer = 0;
+                                const damage = Math.max(1, enemy.atk - this.player.def);
+                                this.player.hp -= damage;
+                                this.playerHitFlash = 0.15;
+                            }
+                        }
+                    }
                 });
                 this.projectiles.forEach(proj => {
+                    // Boss 的投射物伤害玩家
+                    if (proj.isEnemy) {
+                        if (this.player) {
+                            const isInvincible = this.activePowerups.some(ap => ap.effect.invincible);
+                            if (!isInvincible) {
+                                const dx = proj.x - this.player.x, dy = proj.y - this.player.y;
+                                const dist = Math.sqrt(dx*dx + dy*dy);
+                                if (dist < proj.area + 20) {
+                                    const damage = proj.damage;
+                                    this.player.hp -= damage;
+                                    proj.hit = true;
+                                    this.triggerShake(3, 0.15);
+                                    this.playSound('hit');
+                                    this.playerHitFlash = 0.15;
+                                }
+                            }
+                        }
+                        return;
+                    }
                     this.enemies.forEach(enemy => {
                         const dx = proj.x - enemy.x, dy = proj.y - enemy.y;
                         const dist = Math.sqrt(dx*dx + dy*dy);
                         if (dist < proj.area + 20) {
-                            const damage = proj.damage * (1 + this.player.damageBonus);
+                            // 连击加成：每 10 连击 +5% 伤害
+                            const comboBonus = 1 + Math.floor(this.combo / 10) * 0.05;
+                            // 暴击判定（10% + 连击加成% 概率）
+                            const critChance = 0.1 + Math.min(this.combo * 0.005, 0.4);
+                            const isCritical = Math.random() < critChance;
+                            const critMult = isCritical ? 2.0 : 1.0;
+                            const damage = proj.damage * (1 + this.player.damageBonus) * comboBonus * critMult;
                             enemy.currentHp -= damage;
-                            this.showDamageNumber(damage, enemy.x, enemy.y);
+                            this.totalDamage += damage;
+
+                            // 粒子效果
+                            const particleColor = proj.icon === '🔥' ? '#ff4400' : proj.icon === '⚡' ? '#ffff00' : proj.icon === '💀' ? '#8800ff' : '#ffdd00';
+                            this.spawnParticles(proj.x, proj.y, particleColor, isCritical ? 8 : 4, 80, 4);
+
+                            this.showDamageNumber(damage, enemy.x, enemy.y, isCritical);
                             if (this.player.lifesteal > 0) this.player.hp = Math.min(this.player.maxHp, this.player.hp + damage*this.player.lifesteal);
                             proj.hit = true;
                         }
                     });
                 });
-                this.enemies = this.enemies.filter(enemy => { if (enemy.currentHp <= 0) { this.gainExp(enemy.exp); return false; } return true; });
+                this.enemies = this.enemies.filter(enemy => {
+                    if (enemy.currentHp <= 0) {
+                        // Boss 死亡处理
+                        if (enemy.isBoss) {
+                            this.onBossDeath(enemy);
+                            return false;
+                        }
+                        // 普通怪物死亡
+                        this.killCount++;
+                        this.addCombo();
+                        this.addWaveKill();
+                        // 分数
+                        const scoreGain = enemy.isElite ? 50 : (10 + this.wave * 2);
+                        this.score += scoreGain;
+                        document.getElementById('killCount').textContent = this.killCount;
+
+                        // 击杀里程碑检查
+                        const milestoneKeys = Object.keys(this.milestones).map(Number).sort((a,b)=>a-b);
+                        for (const key of milestoneKeys) {
+                            if (this.killCount >= key && !this.milestones[key]) {
+                                this.milestones[key] = true;
+                                this.onMilestone(key);
+                                break; // 每次只触发一个里程碑
+                            }
+                        }
+
+                        // 死亡粒子
+                        this.spawnParticles(enemy.x, enemy.y, enemy.color, 6, 100, 5);
+                        // 掉落经验球
+                        this.spawnExpOrb(enemy.x, enemy.y, enemy.exp || 10);
+                        this.playSound('kill');
+                        return false;
+                    }
+                    return true;
+                });
                 if (this.player.hp <= 0) this.gameOver();
             }
 
@@ -709,24 +1318,25 @@
                 const dx = target.x - this.player.x, dy = target.y - this.player.y;
                 const dist = Math.sqrt(dx*dx + dy*dy);
                 if (dist > 0) {
-                    this.projectiles.push({ x: this.player.x, y: this.player.y, vx: (dx/dist)*300, vy: (dy/dist)*300, damage: skill.damage, area: skill.area, life: 3, hit: false });
+                    const trailColors = {
+                        '🔥':'#ff4400','⚡':'#ffff00','💀':'#8800ff','☄️':'#ff6600',
+                        '🌪️':'#88ff88','🛡️':'#8888ff','👊':'#ff8888','⚔️':'#ccccff',
+                        '🏹':'#88ff88','🗡️':'#ff4488','🎯':'#ffaa88','🕸️':'#aa88ff','✨':'#ffffcc'
+                    };
+                    this.projectiles.push({
+                        x: this.player.x, y: this.player.y,
+                        vx: (dx/dist)*300, vy: (dy/dist)*300,
+                        damage: skill.damage, area: skill.area, life: 3, hit: false,
+                        icon: skill.icon,
+                        trailColor: trailColors[skill.icon] || '#ff0'
+                    });
                 }
-            }
-
-            showDamageNumber(damage, x, y) {
-                const el = document.createElement('div');
-                el.className = 'damage-number';
-                el.textContent = Math.floor(damage);
-                el.style.left = (x - this.cameraX) + 'px';
-                el.style.top = (y - this.cameraY) + 'px';
-                el.style.color = '#ff0';
-                this.damageContainer.appendChild(el);
-                setTimeout(() => el.remove(), 1000);
             }
 
             gainExp(amount) {
                 if (!this.player) return;
                 this.player.exp += amount * (1 + this.player.expBonus);
+                let newLevel = false;
                 while (this.player.exp >= this.player.expToNext) {
                     this.player.exp -= this.player.expToNext;
                     this.player.level++;
@@ -734,50 +1344,965 @@
                     this.player.maxHp += 5;
                     this.player.hp = this.player.maxHp;
                     this.player.atk += 2;
-                    if (this.player.level % 10 === 0) this.showTalentSelect();
+                    newLevel = true;
+                }
+                if (newLevel) {
+                    if (this.player.level % 10 === 0) {
+                        this.showTalentSelect();
+                    } else if (this.skills.length < 6 && this.player.level % 2 === 0) {
+                        this.showSkillSelect();
+                    }
                 }
                 this.updateUI();
             }
 
             render() {
-                this.ctx.fillStyle = '#2d5a27';
-                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-                this.ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+                // 屏幕震动偏移
+                const shake = this.getShakeOffset();
+                this.ctx.save();
+                this.ctx.translate(shake.x, shake.y);
+
+                // 根据波次选择地形主题
+                const terrainIdx = Math.min(Math.floor((this.wave - 1) / 5), TERRAIN_THEMES.length - 1);
+                if (terrainIdx !== this.terrainIndex) {
+                    this.terrainIndex = terrainIdx;
+                    this.terrainBg = TERRAIN_THEMES[terrainIdx].bg;
+                    this.terrainGrid = TERRAIN_THEMES[terrainIdx].grid;
+                }
+                // 背景颜色
+                this.ctx.fillStyle = this.terrainBg;
+                this.ctx.fillRect(-10, -10, this.canvas.width + 20, this.canvas.height + 20);
+
+                // 草地纹理 - 基于世界坐标的装饰性草叶
+                const tileSize = 100;
+                const startGridX = Math.floor((this.cameraX - shake.x) / tileSize);
+                const startGridY = Math.floor((this.cameraY - shake.y) / tileSize);
+                const endGridX = Math.ceil((this.cameraX - shake.x + this.canvas.width) / tileSize);
+                const endGridY = Math.ceil((this.cameraY - shake.y + this.canvas.height) / tileSize);
+                this.ctx.fillStyle = 'rgba(34, 100, 34, 0.5)';
+                for (let gx = startGridX; gx <= endGridX; gx++) {
+                    for (let gy = startGridY; gy <= endGridY; gy++) {
+                        // 使用哈希生成固定位置
+                        const hash = ((gx * 73856093) ^ (gy * 19349663)) & 0x7FFFFFFF;
+                        const localX = (gx + (hash % 100) / 100) * tileSize - (this.cameraX - shake.x);
+                        const localY = (gy + ((hash >> 8) % 100) / 100) * tileSize - (this.cameraY - shake.y);
+                        this.ctx.beginPath();
+                        this.ctx.arc(localX, localY, 2, 0, Math.PI * 2);
+                        this.ctx.fill();
+                    }
+                }
+
+                this.ctx.strokeStyle = this.terrainGrid;
                 this.ctx.lineWidth = 1;
                 const gridSize = 50;
-                const offsetX = -this.cameraX % gridSize, offsetY = -this.cameraY % gridSize;
-                for (let x = offsetX; x < this.canvas.width; x += gridSize) { this.ctx.beginPath(); this.ctx.moveTo(x, 0); this.ctx.lineTo(x, this.canvas.height); this.ctx.stroke(); }
-                for (let y = offsetY; y < this.canvas.height; y += gridSize) { this.ctx.beginPath(); this.ctx.moveTo(0, y); this.ctx.lineTo(this.canvas.width, y); this.ctx.stroke(); }
+                const offsetX = -(this.cameraX - shake.x) % gridSize, offsetY = -(this.cameraY - shake.y) % gridSize;
+                for (let x = offsetX; x < this.canvas.width + gridSize; x += gridSize) { this.ctx.beginPath(); this.ctx.moveTo(x, 0); this.ctx.lineTo(x, this.canvas.height); this.ctx.stroke(); }
+                for (let y = offsetY; y < this.canvas.height + gridSize; y += gridSize) { this.ctx.beginPath(); this.ctx.moveTo(0, y); this.ctx.lineTo(this.canvas.width, y); this.ctx.stroke(); }
+
                 if (this.player) {
                     const sx = this.player.x - this.cameraX, sy = this.player.y - this.cameraY;
-                    this.ctx.fillStyle = '#00ff88';
+                    // 玩家光环
+                    this.ctx.fillStyle = 'rgba(0, 255, 136, 0.15)';
+                    this.ctx.beginPath(); this.ctx.arc(sx, sy, 35, 0, Math.PI*2); this.ctx.fill();
+
+                    // 受击闪白
+                    if (this.playerHitFlash > 0) {
+                        this.ctx.fillStyle = '#ffffff';
+                        this.ctx.globalAlpha = this.playerHitFlash * 3;
+                        this.ctx.beginPath(); this.ctx.arc(sx, sy, 22, 0, Math.PI*2); this.ctx.fill();
+                        this.ctx.globalAlpha = 1;
+                    }
+
+                    // 无敌光环
+                    if (this.activePowerups.some(ap => ap.effect.invincible)) {
+                        this.ctx.strokeStyle = '#ffd700';
+                        this.ctx.lineWidth = 3;
+                        this.ctx.globalAlpha = 0.5 + Math.sin(Date.now()/100) * 0.3;
+                        this.ctx.beginPath(); this.ctx.arc(sx, sy, 32, 0, Math.PI*2); this.ctx.stroke();
+                        this.ctx.globalAlpha = 1;
+                    }
+
+                    // 玩家身体
+                    this.ctx.fillStyle = this.playerHitFlash > 0 ? '#ffffff' : '#00ff88';
                     this.ctx.beginPath(); this.ctx.arc(sx, sy, 20, 0, Math.PI*2); this.ctx.fill();
                     this.ctx.strokeStyle = '#00ff88'; this.ctx.lineWidth = 3;
                     this.ctx.beginPath(); this.ctx.arc(sx, sy, 25, 0, Math.PI*2); this.ctx.stroke();
+                    // 连击光环
+                    if (this.combo >= 10) {
+                        this.ctx.strokeStyle = `rgba(255, ${136 + Math.sin(Date.now()/100)*100}, 0, 0.6)`;
+                        this.ctx.lineWidth = 2;
+                        this.ctx.beginPath(); this.ctx.arc(sx, sy, 30 + Math.sin(Date.now()/200)*3, 0, Math.PI*2); this.ctx.stroke();
+                    }
                 }
+
                 this.enemies.forEach(enemy => {
                     const sx = enemy.x - this.cameraX, sy = enemy.y - this.cameraY;
-                    if (sx < -30 || sx > this.canvas.width+30 || sy < -30 || sy > this.canvas.height+30) return;
-                    this.ctx.fillStyle = enemy.color;
-                    this.ctx.beginPath(); this.ctx.arc(sx, sy, 15, 0, Math.PI*2); this.ctx.fill();
-                    const hpPercent = enemy.currentHp / enemy.maxHp;
-                    this.ctx.fillStyle = '#333'; this.ctx.fillRect(sx-15, sy-25, 30, 4);
-                    this.ctx.fillStyle = hpPercent > 0.5 ? '#0f0' : hpPercent > 0.25 ? '#ff0' : '#f00';
-                    this.ctx.fillRect(sx-15, sy-25, 30*hpPercent, 4);
+                    if (sx < -60 || sx > this.canvas.width+60 || sy < -60 || sy > this.canvas.height+60) return;
+
+                    if (enemy.isBoss) {
+                        // Boss 渲染
+                        const pulse = Math.sin(Date.now()/200) * 3;
+                        const bossSize = (enemy.size || 40) + pulse;
+                        // 发光效果
+                        this.ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+                        this.ctx.beginPath(); this.ctx.arc(sx, sy, bossSize + 15, 0, Math.PI*2); this.ctx.fill();
+                        // 身体
+                        this.ctx.fillStyle = enemy.enraged ? '#ff6666' : enemy.color;
+                        this.ctx.beginPath(); this.ctx.arc(sx, sy, bossSize, 0, Math.PI*2); this.ctx.fill();
+                        this.ctx.strokeStyle = '#ff0000'; this.ctx.lineWidth = 3;
+                        this.ctx.beginPath(); this.ctx.arc(sx, sy, bossSize, 0, Math.PI*2); this.ctx.stroke();
+                        // 狂暴 aura
+                        if (enemy.enraged) {
+                            this.ctx.fillStyle = 'rgba(255, 100, 0, 0.3)';
+                            this.ctx.beginPath(); this.ctx.arc(sx, sy, bossSize + 25 + Math.sin(Date.now()/100) * 5, 0, Math.PI*2); this.ctx.fill();
+                        }
+                        // 血条
+                        const hpPercent = enemy.currentHp / enemy.maxHp;
+                        this.ctx.fillStyle = '#333'; this.ctx.fillRect(sx - bossSize, sy - bossSize - 12, bossSize * 2, 6);
+                        this.ctx.fillStyle = hpPercent > 0.5 ? '#0f0' : hpPercent > 0.25 ? '#ff0' : '#f00';
+                        this.ctx.fillRect(sx - bossSize, sy - bossSize - 12, bossSize * 2 * hpPercent, 6);
+                    } else {
+                        const baseSize = enemy.sizeMult ? 15 * enemy.sizeMult : 15;
+                        // 精英发光边框
+                        if (enemy.isElite) {
+                            this.ctx.fillStyle = enemy.eliteColor + '40';
+                            this.ctx.globalAlpha = 0.5;
+                            this.ctx.beginPath(); this.ctx.arc(sx, sy, baseSize + 5, 0, Math.PI*2); this.ctx.fill();
+                            this.ctx.globalAlpha = 1;
+                            this.ctx.strokeStyle = enemy.eliteColor;
+                            this.ctx.lineWidth = 2;
+                            this.ctx.beginPath(); this.ctx.arc(sx, sy, baseSize, 0, Math.PI*2); this.ctx.stroke();
+                        }
+                        this.ctx.fillStyle = enemy.color;
+                        this.ctx.beginPath(); this.ctx.arc(sx, sy, baseSize, 0, Math.PI*2); this.ctx.fill();
+                        const hpPercent = enemy.currentHp / enemy.maxHp;
+                        const barW = enemy.isElite ? 35 : 30;
+                        const barY = enemy.isElite ? sy - baseSize - 12 : sy - 25;
+                        this.ctx.fillStyle = '#333'; this.ctx.fillRect(sx - barW/2, barY, barW, 4);
+                        this.ctx.fillStyle = enemy.isElite ? enemy.eliteColor : (hpPercent > 0.5 ? '#0f0' : hpPercent > 0.25 ? '#ff0' : '#f00');
+                        this.ctx.fillRect(sx - barW/2, barY, barW * hpPercent, 4);
+                        // 精英名称
+                        if (enemy.isElite) {
+                            this.ctx.fillStyle = enemy.eliteColor;
+                            this.ctx.font = 'bold 10px Microsoft YaHei';
+                            this.ctx.textAlign = 'center';
+                            this.ctx.fillText(enemy.elitePrefix, sx, barY - 3);
+                        }
+                    }
                 });
+
                 this.projectiles.forEach(proj => {
                     const sx = proj.x - this.cameraX, sy = proj.y - this.cameraY;
-                    this.ctx.fillStyle = '#ff0';
+                    // Boss 投射物 - 红色
+                    if (proj.isEnemy) {
+                        this.ctx.fillStyle = '#ff0000';
+                        this.ctx.globalAlpha = 0.7;
+                        this.ctx.beginPath(); this.ctx.arc(sx, sy, 10, 0, Math.PI*2); this.ctx.fill();
+                        this.ctx.strokeStyle = '#ff0000'; this.ctx.lineWidth = 2;
+                        this.ctx.globalAlpha = 0.4;
+                        this.ctx.beginPath(); this.ctx.arc(sx, sy, 15, 0, Math.PI*2); this.ctx.stroke();
+                        this.ctx.globalAlpha = 1;
+                        return;
+                    }
+                    // 根据技能图标决定颜色
+                    let color = '#ff0';
+                    if (proj.icon === '🔥') color = '#ff4400';
+                    else if (proj.icon === '⚡') color = '#ffff00';
+                    else if (proj.icon === '💀') color = '#8800ff';
+                    else if (proj.icon === '☄️') color = '#ff6600';
+                    else if (proj.icon === '🌪️') color = '#88ff88';
+                    else if (proj.icon === '🛡️') color = '#8888ff';
+                    else if (proj.icon === '👊') color = '#ff8888';
+                    else if (proj.icon === '⚔️') color = '#ccccff';
+                    else if (proj.icon === '🏹') color = '#88ff88';
+                    else if (proj.icon === '🗡️') color = '#ff4488';
+                    else if (proj.icon === '🎯') color = '#ffaa88';
+                    else if (proj.icon === '🕸️') color = '#aa88ff';
+
+                    this.ctx.fillStyle = color;
                     this.ctx.beginPath(); this.ctx.arc(sx, sy, 8, 0, Math.PI*2); this.ctx.fill();
-                    this.ctx.strokeStyle = '#ff8800'; this.ctx.lineWidth = 2;
+                    this.ctx.strokeStyle = color; this.ctx.lineWidth = 2;
+                    this.ctx.globalAlpha = 0.5;
                     this.ctx.beginPath(); this.ctx.arc(sx, sy, 12, 0, Math.PI*2); this.ctx.stroke();
+                    this.ctx.globalAlpha = 1;
+                });
+
+                // 渲染粒子
+                this.renderParticles();
+
+                // 渲染经验球
+                this.renderExpOrbs();
+
+                // 渲染增益道具
+                this.renderPowerups();
+
+                // 地图边界提示
+                this.renderMapBoundary();
+
+                // 屏幕闪光
+                if (this.flashTimer < this.flashDuration) {
+                    const progress = this.flashTimer / this.flashDuration;
+                    const alpha = this.flashAlpha * (1 - progress);
+                    this.ctx.fillStyle = this.flashColor;
+                    this.ctx.globalAlpha = alpha;
+                    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.ctx.globalAlpha = 1;
+                }
+
+                // HP 低警告
+                if (this.player && this.player.hp / this.player.maxHp < 0.25) {
+                    const pulseAlpha = 0.1 + Math.sin(Date.now() / 150) * 0.1;
+                    this.ctx.fillStyle = '#ff0000';
+                    this.ctx.globalAlpha = pulseAlpha;
+                    this.ctx.fillRect(0, 0, this.canvas.width, 10);
+                    this.ctx.fillRect(0, this.canvas.height - 10, this.canvas.width, 10);
+                    this.ctx.fillRect(0, 0, 10, this.canvas.height);
+                    this.ctx.fillRect(this.canvas.width - 10, 0, 10, this.canvas.height);
+                    this.ctx.globalAlpha = 1;
+                }
+
+                // 暗角效果
+                const vignette = this.ctx.createRadialGradient(
+                    this.canvas.width/2, this.canvas.height/2, this.canvas.width * 0.3,
+                    this.canvas.width/2, this.canvas.height/2, this.canvas.width * 0.7
+                );
+                vignette.addColorStop(0, 'rgba(0,0,0,0)');
+                vignette.addColorStop(1, 'rgba(0,0,0,0.3)');
+                this.ctx.fillStyle = vignette;
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // 休息波次提示
+                if (this.waveBreak) {
+                    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                    this.ctx.fillRect(0, this.canvas.height - 40, this.canvas.width, 40);
+                    this.ctx.fillStyle = '#ffd700';
+                    this.ctx.font = 'bold 18px Microsoft YaHei';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText(`休息波次 - 下一波：${Math.ceil(this.waveBreakDuration)}s`, this.canvas.width/2, this.canvas.height - 15);
+                    document.getElementById('skipWaveBtn').style.display = 'block';
+                } else {
+                    document.getElementById('skipWaveBtn').style.display = 'none';
+                }
+
+                this.ctx.restore();
+
+                // 小地图（在 ctx restore 之后绘制，避免震动影响）
+                this.renderMinimap();
+            }
+
+            // ========== 音效系统 ==========
+
+            initAudio() {
+                if (!this.audioCtx) {
+                    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+
+            playSound(type) {
+                if (!this.audioCtx) return;
+                try {
+                    const osc = this.audioCtx.createOscillator();
+                    const gain = this.audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.audioCtx.destination);
+                    const now = this.audioCtx.currentTime;
+
+                    switch(type) {
+                        case 'hit':
+                            osc.type = 'square';
+                            osc.frequency.setValueAtTime(200, now);
+                            osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+                            gain.gain.setValueAtTime(0.1, now);
+                            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                            osc.start(now); osc.stop(now + 0.1);
+                            break;
+                        case 'kill':
+                            osc.type = 'sawtooth';
+                            osc.frequency.setValueAtTime(400, now);
+                            osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
+                            gain.gain.setValueAtTime(0.08, now);
+                            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                            osc.start(now); osc.stop(now + 0.15);
+                            break;
+                        case 'levelup':
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(523, now);
+                            osc.frequency.setValueAtTime(659, now + 0.1);
+                            osc.frequency.setValueAtTime(784, now + 0.2);
+                            gain.gain.setValueAtTime(0.12, now);
+                            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                            osc.start(now); osc.stop(now + 0.4);
+                            break;
+                        case 'boss':
+                            osc.type = 'sawtooth';
+                            osc.frequency.setValueAtTime(100, now);
+                            osc.frequency.exponentialRampToValueAtTime(50, now + 0.5);
+                            gain.gain.setValueAtTime(0.15, now);
+                            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                            osc.start(now); osc.stop(now + 0.5);
+                            break;
+                        case 'wave':
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(440, now);
+                            osc.frequency.setValueAtTime(554, now + 0.15);
+                            gain.gain.setValueAtTime(0.1, now);
+                            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                            osc.start(now); osc.stop(now + 0.3);
+                            break;
+                    }
+                } catch(e) {}
+            }
+
+            // ========== 粒子系统 ==========
+
+            spawnParticles(x, y, color, count, speed, size) {
+                // 性能保护
+                if (this.particles.length > 500) return;
+                for (let i = 0; i < count; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const vel = Math.random() * speed;
+                    this.particles.push({
+                        x, y,
+                        vx: Math.cos(angle) * vel,
+                        vy: Math.sin(angle) * vel,
+                        life: 0.3 + Math.random() * 0.5,
+                        maxLife: 0.3 + Math.random() * 0.5,
+                        color,
+                        size: size * (0.5 + Math.random() * 0.5)
+                    });
+                }
+            }
+
+            updateParticles(delta) {
+                this.particles.forEach(p => {
+                    p.x += p.vx * delta;
+                    p.y += p.vy * delta;
+                    p.life -= delta;
+                    p.vx *= 0.98;
+                    p.vy *= 0.98;
+                });
+                this.particles = this.particles.filter(p => p.life > 0);
+            }
+
+            renderParticles() {
+                this.particles.forEach(p => {
+                    const sx = p.x - this.cameraX, sy = p.y - this.cameraY;
+                    if (sx < -20 || sx > this.canvas.width + 20 || sy < -20 || sy > this.canvas.height + 20) return;
+                    const alpha = p.life / p.maxLife;
+                    this.ctx.globalAlpha = alpha;
+                    this.ctx.fillStyle = p.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(sx, sy, p.size * alpha, 0, Math.PI * 2);
+                    this.ctx.fill();
+                });
+                this.ctx.globalAlpha = 1;
+            }
+
+            // ========== 屏幕震动 ==========
+
+            triggerShake(amount, duration) {
+                this.shakeAmount = amount;
+                this.shakeDuration = duration;
+                this.shakeTimer = 0;
+            }
+
+            triggerFlash(color, alpha, duration) {
+                this.flashColor = color;
+                this.flashAlpha = alpha;
+                this.flashDuration = duration;
+                this.flashTimer = 0;
+            }
+
+            getShakeOffset() {
+                if (this.shakeTimer < this.shakeDuration) {
+                    const progress = this.shakeTimer / this.shakeDuration;
+                    const intensity = this.shakeAmount * (1 - progress);
+                    return {
+                        x: (Math.random() - 0.5) * intensity * 2,
+                        y: (Math.random() - 0.5) * intensity * 2
+                    };
+                }
+                return { x: 0, y: 0 };
+            }
+
+            // ========== 波次系统 ==========
+
+            updateWave(delta) {
+                if (this.waveBreak) {
+                    this.waveBreakDuration -= delta;
+                    // 休息期间持续回血
+                    if (this.player) {
+                        this.player.hp = Math.min(this.player.maxHp, this.player.hp + this.player.maxHp * 0.02 * delta);
+                    }
+                    if (this.waveBreakDuration <= 0) {
+                        this.waveBreak = false;
+                        this.waveBreakDuration = 5;
+                        this.waveKillsRequired = 15 + this.wave * 5;
+                        this.waveKills = 0;
+                        document.getElementById('waveProgress').classList.add('active');
+                        this.triggerFlash('#ffd700', 0.3, 0.3);
+                    }
+                    return;
+                }
+
+                // 检查波次完成
+                if (this.waveKills >= this.waveKillsRequired && !this.bossActive) {
+                    this.startBossFight();
+                }
+            }
+
+            addWaveKill() {
+                if (!this.waveBreak) {
+                    this.waveKills++;
+                    const progress = Math.min(this.waveKills / this.waveKillsRequired, 1);
+                    document.getElementById('waveProgressFill').style.width = (progress * 100) + '%';
+
+                    if (this.waveKills >= this.waveKillsRequired && !this.bossActive) {
+                        this.startBossFight();
+                    }
+                }
+            }
+
+            showWaveIndicator(text) {
+                const el = document.getElementById('waveIndicator');
+                el.textContent = text;
+                el.classList.remove('active');
+                void el.offsetWidth; // 强制回流重启动画
+                el.classList.add('active');
+                setTimeout(() => el.classList.remove('active'), 2500);
+            }
+
+            startBossFight() {
+                this.bossActive = true;
+                this.spawnPauseTimer = 3; // Boss 出现后暂停 3 秒刷怪
+                const bossIndex = Math.min(Math.floor((this.wave - 1) / 3), BOSS_TYPES.length - 1);
+                const bossTemplate = BOSS_TYPES[bossIndex];
+                const hpMult = 1 + this.player.level * 0.1;
+
+                // Boss 出现在玩家对面
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 400;
+                const boss = {
+                    ...bossTemplate,
+                    x: this.player.x + Math.cos(angle) * dist,
+                    y: this.player.y + Math.sin(angle) * dist,
+                    maxHp: bossTemplate.hp * hpMult,
+                    currentHp: bossTemplate.hp * hpMult,
+                    isBoss: true,
+                    atk: bossTemplate.atk * (1 + this.player.level * 0.05),
+                    speed: bossTemplate.speed * (1 + this.wave * 0.02),
+                    attackTimer: 0,
+                    attackInterval: 1.5,
+                    phase: 0,
+                };
+                this.enemies.push(boss);
+                this.bossEntity = boss;
+
+                // UI 更新
+                document.getElementById('bossBar').classList.add('active');
+                document.getElementById('bossName').textContent = bossTemplate.name;
+                document.getElementById('bossHpFill').style.width = '100%';
+
+                this.triggerShake(8, 0.5);
+                this.triggerFlash('#ff0000', 0.4, 0.3);
+                this.playSound('boss');
+                this.showWaveIndicator('⚠️ BOSS 来袭 ⚠️');
+            }
+
+            onBossDeath(boss) {
+                this.bossActive = false;
+                this.bossEntity = null;
+                document.getElementById('bossBar').classList.remove('active');
+
+                // Boss 分数
+                this.score += 100 + this.wave * 20;
+
+                // 大量粒子效果
+                this.spawnParticles(boss.x, boss.y, '#ff4444', 30, 200, 8);
+                this.spawnParticles(boss.x, boss.y, '#ffdd00', 20, 150, 6);
+                this.spawnParticles(boss.x, boss.y, '#ff8800', 15, 100, 10);
+
+                this.triggerShake(15, 0.8);
+                this.playSound('kill');
+
+                // Boss 掉落大经验球
+                this.spawnExpOrb(boss.x, boss.y, boss.exp || 200);
+                // Boss 掉落增益道具
+                this.spawnPowerup(boss.x + 30, boss.y);
+                this.spawnPowerup(boss.x - 30, boss.y + 20);
+
+                // 波次奖励
+                this.wave++;
+                this.waveBreak = true;
+                this.waveBreakDuration = 5;
+                this.player.hp = Math.min(this.player.maxHp, this.player.hp + this.player.maxHp * 0.3);
+
+                document.getElementById('waveProgressText').textContent = `第 ${this.wave} 波`;
+                document.getElementById('waveProgressFill').style.width = '0%';
+
+                this.showWaveIndicator(`🌊 第 ${this.wave} 波`);
+                this.playSound('wave');
+                this.saveGame();
+            }
+
+            // ========== 连击系统 ==========
+
+            updateCombo(delta) {
+                if (this.combo > 0) {
+                    this.comboTimer -= delta;
+                    if (this.comboTimer <= 0) {
+                        this.combo = 0;
+                        document.getElementById('comboDisplay').classList.remove('active');
+                    }
+                }
+            }
+
+            addCombo() {
+                this.combo++;
+                this.comboTimer = this.comboDecayTime;
+                const comboEl = document.getElementById('comboDisplay');
+                comboEl.classList.add('active');
+                document.getElementById('comboCount').textContent = this.combo;
+
+                // 连击倍数加成伤害
+                if (this.combo >= 10 && this.combo % 10 === 0) {
+                    this.triggerShake(3, 0.2);
+                }
+            }
+
+            onMilestone(kills) {
+                this.playSound('levelup');
+                this.triggerFlash('#ffd700', 0.5, 0.5);
+                const rewards = {
+                    100: '🎉 击杀100! 回复全部生命!',
+                    500: '🏆 击杀500! 全属性+10%',
+                    1000: '💎 击杀1000! 掉落强力增益!',
+                    5000: '👑 击杀5000! 传奇成就!',
+                    10000: '🌟 击杀10000! 仙尊降临!'
+                };
+                this.showWaveIndicator(rewards[kills] || `${kills} 击杀达成!`);
+
+                // 奖励
+                if (kills === 100) {
+                    this.player.hp = this.player.maxHp;
+                } else if (kills === 500) {
+                    this.player.damageBonus += 0.1;
+                    this.player.def += 1;
+                    this.player.atk += 3;
+                } else if (kills === 1000) {
+                    // 掉落强力增益道具
+                    this.powerups.push({
+                        ...POWERUP_TYPES[4], // 全属性强化
+                        x: this.player.x + 20, y: this.player.y,
+                        size: 15, bobPhase: 0, lifetime: 30,
+                    });
+                } else if (kills >= 5000) {
+                    this.player.damageBonus += 0.15;
+                    this.player.def += 3;
+                    this.player.atk += 5;
+                    this.player.hp = this.player.maxHp;
+                }
+            }
+
+            // ========== 经验球系统 ==========
+
+            spawnExpOrb(x, y, amount) {
+                this.expOrbs.push({
+                    x, y,
+                    amount,
+                    size: Math.max(4, Math.min(amount / 10, 8)),
+                    color: amount >= 200 ? '#ff4444' : amount >= 50 ? '#ffaa00' : '#00ff88',
+                    bobPhase: Math.random() * Math.PI * 2,
                 });
             }
 
+            updateExpOrbs(delta) {
+                if (!this.player) return;
+                // 经验球向玩家吸引（距离 < 80 时）
+                this.expOrbs.forEach(orb => {
+                    orb.bobPhase += delta * 3;
+                    const dx = this.player.x - orb.x;
+                    const dy = this.player.y - orb.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 80 && dist > 0) {
+                        // 被吸引
+                        const speed = 250;
+                        orb.x += (dx / dist) * speed * delta;
+                        orb.y += (dy / dist) * speed * delta;
+                    }
+
+                    // 吸收
+                    if (dist < 25) {
+                        this.gainExp(orb.amount);
+                        orb.collected = true;
+                        // 吸收粒子
+                        this.spawnParticles(orb.x, orb.y, orb.color, 3, 40, 3);
+                    }
+                });
+                this.expOrbs = this.expOrbs.filter(orb => !orb.collected);
+            }
+
+            renderExpOrbs() {
+                this.expOrbs.forEach(orb => {
+                    const sx = orb.x - this.cameraX;
+                    const sy = orb.y - this.cameraY + Math.sin(orb.bobPhase) * 3;
+                    if (sx < -20 || sx > this.canvas.width + 20 || sy < -20 || sy > this.canvas.height + 20) return;
+
+                    // 发光
+                    this.ctx.fillStyle = orb.color.replace(')', ', 0.3)').replace('rgb', 'rgba');
+                    this.ctx.globalAlpha = 0.5;
+                    this.ctx.beginPath();
+                    this.ctx.arc(sx, sy, orb.size + 5, 0, Math.PI * 2);
+                    this.ctx.fill();
+
+                    // 核心
+                    this.ctx.globalAlpha = 1;
+                    this.ctx.fillStyle = orb.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(sx, sy, orb.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.strokeStyle = '#fff';
+                    this.ctx.lineWidth = 1;
+                    this.ctx.globalAlpha = 0.5;
+                    this.ctx.beginPath();
+                    this.ctx.arc(sx, sy, orb.size, 0, Math.PI * 2);
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1;
+                });
+            }
+
+            // ========== 增益道具系统 ==========
+
+            spawnPowerup(x, y) {
+                const template = POWERUP_TYPES[Math.floor(Math.random() * POWERUP_TYPES.length)];
+                this.powerups.push({
+                    ...template,
+                    x, y,
+                    size: 15,
+                    bobPhase: Math.random() * Math.PI * 2,
+                    lifetime: 30,
+                });
+            }
+
+            updatePowerups(delta) {
+                if (!this.player) return;
+                this.powerups.forEach(pu => {
+                    pu.bobPhase += delta * 2;
+                    pu.lifetime -= delta;
+
+                    // 吸引范围
+                    const dx = this.player.x - pu.x;
+                    const dy = this.player.y - pu.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 100 && dist > 0) {
+                        const speed = 150;
+                        pu.x += (dx / dist) * speed * delta;
+                        pu.y += (dy / dist) * speed * delta;
+                    }
+
+                    // 拾取
+                    if (dist < 30) {
+                        this.applyPowerup(pu);
+                        pu.collected = true;
+                    }
+                });
+                this.powerups = this.powerups.filter(pu => !pu.collected && pu.lifetime > 0);
+
+                // 更新激活的增益
+                this.activePowerups = this.activePowerups.filter(ap => {
+                    ap.remaining -= delta;
+                    if (ap.remaining <= 0) {
+                        this.removePowerupEffect(ap);
+                        return false;
+                    }
+                    return true;
+                });
+            }
+
+            applyPowerup(pu) {
+                if (!this.player) return;
+                this.playSound('wave');
+                this.spawnParticles(pu.x, pu.y, pu.color, 10, 100, 5);
+
+                const active = {
+                    ...pu,
+                    remaining: pu.duration,
+                    maxDuration: pu.duration,
+                };
+
+                // 应用效果
+                if (pu.effect.damage) {
+                    this.player.damageBonus += pu.effect.damage;
+                }
+                if (pu.effect.def) {
+                    this.player.def += pu.effect.def;
+                }
+                if (pu.effect.speed) {
+                    // 速度加成通过移动系统处理
+                    active.speedBonus = pu.effect.speed;
+                }
+
+                this.activePowerups.push(active);
+
+                // 显示提示
+                const el = document.getElementById('powerupText');
+                el.textContent = `${pu.icon} ${pu.name} (${pu.duration}s)`;
+                el.classList.add('active');
+                setTimeout(() => el.classList.remove('active'), 1500);
+            }
+
+            removePowerupEffect(ap) {
+                if (!this.player) return;
+                if (ap.effect.damage) {
+                    this.player.damageBonus -= ap.effect.damage;
+                }
+                if (ap.effect.def) {
+                    this.player.def -= ap.effect.def;
+                }
+            }
+
+            renderPowerups() {
+                this.powerups.forEach(pu => {
+                    const sx = pu.x - this.cameraX;
+                    const sy = pu.y - this.cameraY + Math.sin(pu.bobPhase) * 5;
+                    if (sx < -30 || sx > this.canvas.width + 30 || sy < -30 || sy > this.canvas.height + 30) return;
+
+                    // 发光
+                    this.ctx.fillStyle = pu.color;
+                    this.ctx.globalAlpha = 0.3;
+                    this.ctx.beginPath();
+                    this.ctx.arc(sx, sy, pu.size + 10, 0, Math.PI * 2);
+                    this.ctx.fill();
+
+                    // 菱形底座
+                    this.ctx.globalAlpha = 0.8;
+                    this.ctx.fillStyle = pu.color;
+                    this.ctx.save();
+                    this.ctx.translate(sx, sy);
+                    this.ctx.rotate(Date.now() / 1000);
+                    this.ctx.fillRect(-pu.size * 0.7, -pu.size * 0.7, pu.size * 1.4, pu.size * 1.4);
+                    this.ctx.restore();
+
+                    // 图标
+                    this.ctx.globalAlpha = 1;
+                    this.ctx.font = '20px serif';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.textBaseline = 'middle';
+                    this.ctx.fillText(pu.icon, sx, sy);
+
+                    // 倒计时
+                    if (pu.lifetime < 10) {
+                        this.ctx.globalAlpha = pu.lifetime / 10;
+                        this.ctx.fillStyle = '#fff';
+                        this.ctx.font = '10px monospace';
+                        this.ctx.fillText(Math.ceil(pu.lifetime) + 's', sx, sy + 15);
+                        this.ctx.globalAlpha = 1;
+                    }
+                });
+
+                // 渲染激活的增益状态
+                this.activePowerups.forEach((ap, i) => {
+                    const x = 10;
+                    const y = 100 + i * 25;
+                    this.ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                    this.ctx.fillRect(x, y, 100, 20);
+                    this.ctx.fillStyle = ap.color;
+                    this.ctx.font = '12px monospace';
+                    this.ctx.textAlign = 'left';
+                    this.ctx.fillText(`${ap.icon} ${Math.ceil(ap.remaining)}s`, x + 5, y + 14);
+                });
+                this.ctx.textAlign = 'start';
+                this.ctx.textBaseline = 'alphabetic';
+            }
+
+            // ========== 小地图 ==========
+
+            renderMinimap() {
+                if (!this.minimapCtx || !this.player) return;
+                const ctx = this.minimapCtx;
+                const mw = 150, mh = 150;
+                const scale = mw / this.mapWidth;
+
+                ctx.clearRect(0, 0, mw, mh);
+
+                // 背景
+                ctx.fillStyle = '#1a3a1a';
+                ctx.fillRect(0, 0, mw, mh);
+
+                // 地图边界
+                ctx.strokeStyle = '#ffd700';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(0, 0, mw, mh);
+
+                // 敌人（红色小点）
+                this.enemies.forEach(enemy => {
+                    const ex = enemy.x * scale;
+                    const ey = enemy.y * scale;
+                    if (enemy.isBoss) {
+                        ctx.fillStyle = '#ff4444';
+                        ctx.fillRect(ex - 2, ey - 2, 4, 4);
+                    } else if (enemy.isElite) {
+                        ctx.fillStyle = enemy.eliteColor;
+                        ctx.fillRect(ex - 2, ey - 2, 3, 3);
+                    } else {
+                        ctx.fillStyle = '#ff8888';
+                        ctx.fillRect(ex, ey, 1, 1);
+                    }
+                });
+
+                // 经验球（绿色小点）
+                this.expOrbs.forEach(orb => {
+                    ctx.fillStyle = orb.color;
+                    ctx.fillRect(orb.x * scale, orb.y * scale, 1, 1);
+                });
+
+                // 增益道具（菱形标记）
+                this.powerups.forEach(pu => {
+                    ctx.fillStyle = pu.color;
+                    ctx.fillRect(pu.x * scale - 1, pu.y * scale - 1, 3, 3);
+                });
+
+                // 玩家（绿色大方块）
+                const px = this.player.x * scale;
+                const py = this.player.y * scale;
+                ctx.fillStyle = '#00ff88';
+                ctx.fillRect(px - 2, py - 2, 5, 5);
+
+                // 玩家 HP（在玩家上方）
+                const hpPercent = this.player.hp / this.player.maxHp;
+                ctx.fillStyle = '#333';
+                ctx.fillRect(px - 8, py - 10, 16, 3);
+                ctx.fillStyle = hpPercent > 0.5 ? '#0f0' : hpPercent > 0.25 ? '#ff0' : '#f00';
+                ctx.fillRect(px - 8, py - 10, 16 * hpPercent, 3);
+
+                // 视野范围
+                const viewW = this.canvas.width * scale;
+                const viewH = this.canvas.height * scale;
+                const viewX = px - viewW / 2;
+                const viewY = py - viewH / 2;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.strokeRect(viewX, viewY, viewW, viewH);
+
+                // 波次信息 + 分数
+                ctx.fillStyle = '#ffd700';
+                ctx.font = '10px Microsoft YaHei';
+                ctx.textAlign = 'left';
+                ctx.fillText(`W${this.wave}`, 3, 12);
+                // 分数
+                this.scoreDisplay += (this.score - this.scoreDisplay) * 0.1;
+                ctx.textAlign = 'right';
+                ctx.fillText(`分数:${Math.floor(this.scoreDisplay)}`, mw - 3, 12);
+                // 地形名称
+                if (TERRAIN_THEMES[this.terrainIndex]) {
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                    ctx.fillText(TERRAIN_THEMES[this.terrainIndex].name, mw / 2, mh - 3);
+                }
+            }
+
+            // ========== 地图边界效果 ==========
+
+            renderMapBoundary() {
+                if (!this.player) return;
+                const border = 50;
+                const sx = this.canvas.width / 2 - this.player.x;
+                const sy = this.canvas.height / 2 - this.player.y;
+
+                // 左边界
+                if (this.cameraX < 0) {
+                    this.ctx.fillStyle = 'rgba(255, 0, 0, 0.15)';
+                    this.ctx.fillRect(0, 0, border, this.canvas.height);
+                }
+                // 右边界
+                if (this.cameraX + this.canvas.width > this.mapWidth) {
+                    this.ctx.fillStyle = 'rgba(255, 0, 0, 0.15)';
+                    this.ctx.fillRect(this.canvas.width - border, 0, border, this.canvas.height);
+                }
+                // 上边界
+                if (this.cameraY < 0) {
+                    this.ctx.fillStyle = 'rgba(255, 0, 0, 0.15)';
+                    this.ctx.fillRect(0, 0, this.canvas.width, border);
+                }
+                // 下边界
+                if (this.cameraY + this.canvas.height > this.mapHeight) {
+                    this.ctx.fillStyle = 'rgba(255, 0, 0, 0.15)';
+                    this.ctx.fillRect(0, this.canvas.height - border, this.canvas.width, border);
+                }
+            }
+
+            // ========== 存档系统 ==========
+
+            saveGame() {
+                try {
+                    const saveData = {
+                        maxWave: this.wave,
+                        maxLevel: this.player ? this.player.level : 1,
+                        totalKills: this.killCount,
+                        highScore: Math.max(this.killCount, this.getSaveHighScore()),
+                        difficulty: this.difficulty,
+                    };
+                    localStorage.setItem('xiuxian_save', JSON.stringify(saveData));
+                } catch(e) {}
+            }
+
+            getSaveHighScore() {
+                try {
+                    const data = JSON.parse(localStorage.getItem('xiuxian_save'));
+                    return data ? data.highScore || 0 : 0;
+                } catch(e) { return 0; }
+            }
+
+            loadSave() {
+                // 加载存档信息用于显示
+                try {
+                    this.savedData = JSON.parse(localStorage.getItem('xiuxian_save'));
+                } catch(e) {
+                    this.savedData = null;
+                }
+            }
+
+            // ========== 改进的伤害数字 ==========
+
+            showDamageNumber(damage, x, y, isCritical) {
+                const el = document.createElement('div');
+                el.className = 'damage-number';
+                const displayDamage = Math.floor(damage);
+                el.textContent = isCritical ? `💥${displayDamage}` : displayDamage;
+
+                // 屏幕坐标（加上屏幕震动偏移）
+                const shake = this.getShakeOffset();
+                el.style.left = (x - this.cameraX + shake.x) + 'px';
+                el.style.top = (y - this.cameraY + shake.y) + 'px';
+
+                if (isCritical) {
+                    el.style.color = '#ff4444';
+                    el.style.fontSize = '28px';
+                    el.style.zIndex = '100';
+                } else if (damage > 100) {
+                    el.style.color = '#ff8800';
+                    el.style.fontSize = '22px';
+                } else {
+                    el.style.color = '#ffff00';
+                    el.style.fontSize = '16px';
+                }
+
+                this.damageContainer.appendChild(el);
+                setTimeout(() => el.remove(), 1000);
+            }
+
+            // ========== 原始方法修改 ==========
+
             gameOver() {
                 this.state = 'gameOver';
+                this.saveGame();
+                const highScore = this.getSaveHighScore();
+                const diffNames = {easy:'简单',normal:'普通',hard:'困难'};
                 document.getElementById('gameOverScreen').classList.remove('hidden');
-                document.getElementById('finalStats').innerHTML = '等级：'+this.player.level+' | 境界：'+REALMS[Math.floor(this.player.level/10)];
+                document.getElementById('finalStats').innerHTML =
+                    `难度：${diffNames[this.difficulty] || '普通'} | 等级：${this.player.level} | 境界：${REALMS[Math.floor(this.player.level/10)]}<br>` +
+                    `击杀：${this.killCount} | 波次：${this.wave} | 分数：${Math.floor(this.score)}<br>` +
+                    `总伤害：${Math.floor(this.totalDamage)} | 历史最高：${highScore}`;
             }
 
             gameLoop(timestamp) {

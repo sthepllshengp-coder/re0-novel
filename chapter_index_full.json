@@ -3289,6 +3289,18 @@
   },
   {
     "vol": "100",
+    "num": "01",
+    "title": "01　『朋友』",
+    "file": "ch100_01.html"
+  },
+  {
+    "vol": "100",
+    "num": "02",
+    "title": "02　『教会的秘仪』",
+    "file": "ch100_02.html"
+  },
+  {
+    "vol": "100",
     "num": "03",
     "title": "03　『光之萌芽』",
     "file": "ch100_03.html"
@@ -3307,6 +3319,42 @@
   },
   {
     "vol": "100",
+    "num": "06",
+    "title": "06　『瞬间沸腾器』",
+    "file": "ch100_06.html"
+  },
+  {
+    "vol": "100",
+    "num": "07",
+    "title": "07　『我的朋友』",
+    "file": "ch100_07.html"
+  },
+  {
+    "vol": "100",
+    "num": "08",
+    "title": "08　『抉择的结果』",
+    "file": "ch100_08.html"
+  },
+  {
+    "vol": "100",
+    "num": "09",
+    "title": "09　『爱哭鬼』",
+    "file": "ch100_09.html"
+  },
+  {
+    "vol": "100",
+    "num": "10",
+    "title": "10　『信赖的沉淀』",
+    "file": "ch100_10.html"
+  },
+  {
+    "vol": "100",
+    "num": "11",
+    "title": "11　『龙珠闪耀的理由』",
+    "file": "ch100_11.html"
+  },
+  {
+    "vol": "100",
     "num": "12",
     "title": "12　『呻吟』",
     "file": "ch100_12.html"
@@ -3319,93 +3367,15 @@
   },
   {
     "vol": "999",
-    "num": "01",
-    "title": "『两个月』",
-    "file": "ch999_if_06_01.html"
-  },
-  {
-    "vol": "999",
-    "num": "02",
-    "title": "02　『从零开始的 Sane Louis』（强欲 IF 线）",
-    "file": "ch999_if_02.html"
-  },
-  {
-    "vol": "999",
-    "num": "02",
-    "title": "『三个月』 上篇",
-    "file": "ch999_if_06_02.html"
-  },
-  {
-    "vol": "999",
-    "num": "03",
-    "title": "03　『从零开始过错的异世界生活』（傲慢 IF 线）",
-    "file": "ch999_if_03.html"
-  },
-  {
-    "vol": "999",
-    "num": "04",
-    "title": "04　『从零开始溺水的异世界生活』（拉姆 IF 线）",
-    "file": "ch999_if_04.html"
-  },
-  {
-    "vol": "999",
-    "num": "04",
-    "title": "『六个月』",
-    "file": "ch999_if_06_04.html"
-  },
-  {
-    "vol": "999",
-    "num": "05",
-    "title": "05　『从零开始的拼凑生活』（暴食 IF 线）",
-    "file": "ch999_if_05.html"
-  },
-  {
-    "vol": "999",
-    "num": "05",
-    "title": "幕间 『忌日』",
-    "file": "ch999_if_06_05.html"
-  },
-  {
-    "vol": "999",
-    "num": "06",
-    "title": "『十个月』",
-    "file": "ch999_if_06_06.html"
-  },
-  {
-    "vol": "999",
-    "num": "07",
-    "title": "『产月』",
-    "file": "ch999_if_06_07.html"
-  },
-  {
-    "vol": "999",
-    "num": "07",
-    "title": "07　『鬼的幸福』",
-    "file": "ch999_if_07.html"
-  },
-  {
-    "vol": "999",
-    "num": "08",
-    "title": "08　『梦想的起始』",
-    "file": "ch999_if_08.html"
-  },
-  {
-    "vol": "999",
-    "num": "08",
-    "title": "终章 『纪念日』",
-    "file": "ch999_if_06_08.html"
-  },
-  {
-    "vol": "999",
-    "num": "13",
-    "title": "13　『学院 Re：0！第二堂课！』",
-    "file": "ch999_if_13.html"
-  },
-  {
-    "vol": "999",
     "num": "00",
     "title": "序章　『四大与异物』",
     "file": "ch999_special_bd_00.html"
+  },
+  {
+    "vol": "999",
+    "num": "01",
+    "title": "『两个月』",
+    "file": "ch999_if_06_01.html"
   },
   {
     "vol": "999",
@@ -3421,6 +3391,24 @@
   },
   {
     "vol": "999",
+    "num": "01",
+    "title": "『my fair bad lady』",
+    "file": "ch999_short05_01.html"
+  },
+  {
+    "vol": "999",
+    "num": "02",
+    "title": "02　『从零开始的 Sane Louis』（强欲 IF 线）",
+    "file": "ch999_if_02.html"
+  },
+  {
+    "vol": "999",
+    "num": "02",
+    "title": "『三个月』 上篇",
+    "file": "ch999_if_06_02.html"
+  },
+  {
+    "vol": "999",
     "num": "02",
     "title": "第二章　『我在这里』",
     "file": "ch999_special_bd_02.html"
@@ -3433,9 +3421,45 @@
   },
   {
     "vol": "999",
+    "num": "02",
+    "title": "『女仆长无法放松休息的假日』",
+    "file": "ch999_short01_02.html"
+  },
+  {
+    "vol": "999",
+    "num": "02",
+    "title": "『RAM IS ORDER』",
+    "file": "ch999_short02_02.html"
+  },
+  {
+    "vol": "999",
+    "num": "02",
+    "title": "『——佩特拉所见的世界』",
+    "file": "ch999_short05_02.html"
+  },
+  {
+    "vol": "999",
+    "num": "03",
+    "title": "03　『从零开始过错的异世界生活』（傲慢 IF 线）",
+    "file": "ch999_if_03.html"
+  },
+  {
+    "vol": "999",
     "num": "03",
     "title": "第三章　『只要是为了你』",
     "file": "ch999_special_bd_03.html"
+  },
+  {
+    "vol": "999",
+    "num": "04",
+    "title": "04　『从零开始溺水的异世界生活』（拉姆 IF 线）",
+    "file": "ch999_if_04.html"
+  },
+  {
+    "vol": "999",
+    "num": "04",
+    "title": "『六个月』",
+    "file": "ch999_if_06_04.html"
   },
   {
     "vol": "999",
@@ -3445,15 +3469,105 @@
   },
   {
     "vol": "999",
+    "num": "04",
+    "title": "『爱蜜莉雅梦游仙境』",
+    "file": "ch999_short01_04.html"
+  },
+  {
+    "vol": "999",
+    "num": "04",
+    "title": "『图书馆员碧翠丝不甘愿的约定』",
+    "file": "ch999_short02_04.html"
+  },
+  {
+    "vol": "999",
+    "num": "04",
+    "title": "『剑鬼恋谭　那之后的两人』",
+    "file": "ch999_short05_04.html"
+  },
+  {
+    "vol": "999",
+    "num": "05",
+    "title": "05　『从零开始的拼凑生活』（暴食 IF 线）",
+    "file": "ch999_if_05.html"
+  },
+  {
+    "vol": "999",
+    "num": "05",
+    "title": "幕间 『忌日』",
+    "file": "ch999_if_06_05.html"
+  },
+  {
+    "vol": "999",
     "num": "05",
     "title": "结尾　『幸福的意思』",
     "file": "ch999_special_bd_05.html"
   },
   {
     "vol": "999",
+    "num": "05",
+    "title": "『喜欢冷天气』",
+    "file": "ch999_short02_05.html"
+  },
+  {
+    "vol": "999",
+    "num": "06",
+    "title": "『十个月』",
+    "file": "ch999_if_06_06.html"
+  },
+  {
+    "vol": "999",
+    "num": "06",
+    "title": "『酒精之乱』",
+    "file": "ch999_short02_06.html"
+  },
+  {
+    "vol": "999",
+    "num": "06",
+    "title": "『剣聖と雷光の銀華乱舞』",
+    "file": "ch999_short05_06.html"
+  },
+  {
+    "vol": "999",
+    "num": "07",
+    "title": "『产月』",
+    "file": "ch999_if_06_07.html"
+  },
+  {
+    "vol": "999",
+    "num": "07",
+    "title": "07　『鬼的幸福』",
+    "file": "ch999_if_07.html"
+  },
+  {
+    "vol": "999",
     "num": "07",
     "title": "『从零开始的常夏生活』",
     "file": "ch999_special_07.html"
+  },
+  {
+    "vol": "999",
+    "num": "07",
+    "title": "『剑鬼恋歌　七幕』",
+    "file": "ch999_short04_07.html"
+  },
+  {
+    "vol": "999",
+    "num": "07",
+    "title": "『奥尔科斯领的赤雪』",
+    "file": "ch999_short05_07.html"
+  },
+  {
+    "vol": "999",
+    "num": "08",
+    "title": "08　『梦想的起始』",
+    "file": "ch999_if_08.html"
+  },
+  {
+    "vol": "999",
+    "num": "08",
+    "title": "终章 『纪念日』",
+    "file": "ch999_if_06_08.html"
   },
   {
     "vol": "999",
@@ -3478,6 +3592,12 @@
     "num": "12",
     "title": "『加菲尔和拉姆、乖僻别扭的恋爱』",
     "file": "ch999_special_12.html"
+  },
+  {
+    "vol": "999",
+    "num": "13",
+    "title": "13　『学院 Re：0！第二堂课！』",
+    "file": "ch999_if_13.html"
   },
   {
     "vol": "999",
@@ -3580,77 +3700,5 @@
     "num": "29",
     "title": "『冰结之绊 前日谈冰结的日常』",
     "file": "ch999_special_29.html"
-  },
-  {
-    "vol": "999",
-    "num": "02",
-    "title": "『女仆长无法放松休息的假日』",
-    "file": "ch999_short01_02.html"
-  },
-  {
-    "vol": "999",
-    "num": "04",
-    "title": "『爱蜜莉雅梦游仙境』",
-    "file": "ch999_short01_04.html"
-  },
-  {
-    "vol": "999",
-    "num": "02",
-    "title": "『RAM IS ORDER』",
-    "file": "ch999_short02_02.html"
-  },
-  {
-    "vol": "999",
-    "num": "04",
-    "title": "『图书馆员碧翠丝不甘愿的约定』",
-    "file": "ch999_short02_04.html"
-  },
-  {
-    "vol": "999",
-    "num": "05",
-    "title": "『喜欢冷天气』",
-    "file": "ch999_short02_05.html"
-  },
-  {
-    "vol": "999",
-    "num": "06",
-    "title": "『酒精之乱』",
-    "file": "ch999_short02_06.html"
-  },
-  {
-    "vol": "999",
-    "num": "07",
-    "title": "『剑鬼恋歌　七幕』",
-    "file": "ch999_short04_07.html"
-  },
-  {
-    "vol": "999",
-    "num": "01",
-    "title": "『my fair bad lady』",
-    "file": "ch999_short05_01.html"
-  },
-  {
-    "vol": "999",
-    "num": "02",
-    "title": "『——佩特拉所见的世界』",
-    "file": "ch999_short05_02.html"
-  },
-  {
-    "vol": "999",
-    "num": "04",
-    "title": "『剑鬼恋谭　那之后的两人』",
-    "file": "ch999_short05_04.html"
-  },
-  {
-    "vol": "999",
-    "num": "06",
-    "title": "『剣聖と雷光の銀華乱舞』",
-    "file": "ch999_short05_06.html"
-  },
-  {
-    "vol": "999",
-    "num": "07",
-    "title": "『奥尔科斯领的赤雪』",
-    "file": "ch999_short05_07.html"
   }
 ]

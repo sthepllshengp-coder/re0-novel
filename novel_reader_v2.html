@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>苍玄大陆 - 小说阅读网</title>
+    <title>RE0：从零开始的异世界生活小说</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -146,6 +146,37 @@
             background: var(--border-color); cursor: not-allowed;
             opacity: 0.6; transform: none;
         }
+        .donate-section {
+            text-align: center; padding: 30px 20px; margin-top: 20px;
+            border-top: 2px dashed var(--border-color);
+        }
+        .donate-title {
+            font-size: 1.1rem; color: var(--primary-color);
+            margin-bottom: 8px; font-weight: 600;
+        }
+        .donate-desc {
+            font-size: 0.85rem; color: #888; margin-bottom: 20px;
+        }
+        .donate-qr-group {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;
+        }
+        .donate-qr-card {
+            background: var(--card-bg); border-radius: 12px;
+            padding: 15px; box-shadow: var(--shadow);
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            transition: transform 0.2s;
+        }
+        .donate-qr-card:hover { transform: translateY(-4px); }
+        .donate-qr-card img {
+            width: 180px; height: 180px; object-fit: contain;
+            border-radius: 8px; background: #f9f9f9;
+        }
+        .donate-qr-label {
+            font-size: 0.9rem; font-weight: 600; color: var(--text-color);
+        }
+        .donate-qr-sub {
+            font-size: 0.75rem; color: #aaa;
+        }
         .settings-panel {
             position: fixed; top: 60px; right: -300px; width: 280px;
             background: var(--card-bg); box-shadow: var(--shadow);
@@ -219,7 +250,7 @@
 
     <header class="header">
         <div class="header-content">
-            <h1 id="headerTitle" onclick="showWelcome()">📖 苍玄大陆</h1>
+            <h1 id="headerTitle" onclick="showWelcome()">📖 RE0：从零开始的异世界生活</h1>
             <div class="header-actions">
                 <button class="btn btn-icon" onclick="toggleSidebar()" title="目录">📑</button>
                 <button class="btn btn-icon" onclick="toggleSettings()" title="设置">⚙️</button>
@@ -271,7 +302,7 @@
 
     <main class="main">
         <div class="welcome" id="welcomePanel">
-            <h2>欢迎来到 苍玄大陆</h2>
+            <h2>欢迎来到 RE0：从零开始的异世界生活</h2>
             <p class="subtitle">RE0：从零开始的异世界生活 网络小说</p>
             <div class="welcome-actions">
                 <button class="btn" onclick="loadChapter(0)">📖 从第一章开始</button>
@@ -289,6 +320,22 @@
             </header>
             <div class="article-content" id="articleContent">
                 <div class="loading"><spinner></spinner><p style="margin-top: 15px;">正在加载章节...</p></div>
+            </div>
+            <div class="donate-section" id="donateSection">
+                <div class="donate-title">❤️ 打赏支持</div>
+                <div class="donate-desc">如果觉得本书不错，欢迎请我喝杯奶茶 🧋</div>
+                <div class="donate-qr-group">
+                    <div class="donate-qr-card">
+                        <img src="wechat.jpg" alt="微信打赏" id="wechatQR">
+                        <div class="donate-qr-label">微信打赏</div>
+                        <div class="donate-qr-sub">长按或扫码支付</div>
+                    </div>
+                    <div class="donate-qr-card">
+                        <img src="alipay.jpg" alt="支付宝打赏" id="alipayQR">
+                        <div class="donate-qr-label">支付宝打赏</div>
+                        <div class="donate-qr-sub">推荐使用</div>
+                    </div>
+                </div>
             </div>
             <nav class="chapter-nav" id="chapterNav">
                 <button class="nav-btn" id="prevBtn" onclick="prevChapter()">← 上一章</button>
@@ -342,6 +389,12 @@
             document.getElementById('localCount').textContent = localCount;
             document.getElementById('totalCount').textContent = chapters.length;
             document.getElementById('welcomeLocalCount').textContent = localCount;
+            // 自动隐藏未配置二维码的打赏区
+            const wechatSrc = document.getElementById('wechatQR').src;
+            const alipaySrc = document.getElementById('alipayQR').src;
+            if (!wechatSrc && !alipaySrc) {
+                document.getElementById('donateSection').style.display = 'none';
+            }
             return localCount;
         }
 
@@ -364,7 +417,7 @@
 
             let html = '';
             Object.keys(volumes).sort().forEach(vol => {
-                const isExpanded = expandedVolumes[vol] !== false;
+                const isExpanded = expandedVolumes[vol] === true;
                 const count = volumes[vol].length;
                 const localCount = volumes[vol].filter(c => localFiles[c.idx]).length;
 
@@ -439,6 +492,8 @@
                 text = text.replace(/<nav[^>]*>[\s\S]*?<\/nav>/g, '');
                 text = text.replace(/<div class="book-summary[^>]*>[\s\S]*?<\/div>/g, '');
                 text = text.replace(/<div class="header[^>]*>[\s\S]*?<\/div>/g, '');
+                // 移除所有图片
+                text = text.replace(/<img[^>]*>/g, '');
                 // 移除空的 div
                 text = text.replace(/<div[^>]*>\s*<\/div>/g, '');
                 return text;
@@ -514,7 +569,7 @@
             }
 
             // 更新顶部标题
-            document.getElementById('headerTitle').textContent = chapters[currentChapter]?.title || '苍玄大陆';
+            document.getElementById('headerTitle').textContent = chapters[currentChapter]?.title || 'RE0：从零开始的异世界生活';
         }
 
         function prevChapter() {

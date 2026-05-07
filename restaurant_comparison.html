@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商务用餐 · 餐厅对比</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; background: #f0f2f5; min-height: 100vh; }
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; padding: 32px 24px 24px; text-align: center; }
+  .header h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+  .header p { font-size: 13px; opacity: 0.7; }
+
+  /* Summary Table */
+  .summary { max-width: 900px; margin: -20px auto 20px; padding: 0 16px; }
+  .summary-card { background: #fff; border-radius: 16px; padding: 20px 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  .summary-card h2 { font-size: 14px; color: #666; margin-bottom: 14px; font-weight: 500; }
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .summary-item { text-align: center; padding: 12px 8px; border-radius: 12px; position: relative; }
+  .summary-item:nth-child(1) { background: #f0f7ff; }
+  .summary-item:nth-child(2) { background: #fff8f0; }
+  .summary-item:nth-child(3) { background: #f5fff5; }
+  .summary-item .rank { display: inline-block; width: 22px; height: 22px; line-height: 22px; text-align: center; border-radius: 50%; font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .summary-item:nth-child(1) .rank { background: #4a90d9; }
+  .summary-item:nth-child(2) .rank { background: #e8943a; }
+  .summary-item:nth-child(3) .rank { background: #52b873; }
+  .summary-item .name { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #1a1a2e; }
+  .summary-item .stat { font-size: 11px; color: #888; margin-bottom: 3px; }
+  .summary-item .stat span { font-size: 16px; font-weight: 700; color: #333; margin-left: 2px; }
+
+  /* Cards */
+  .cards { max-width: 900px; margin: 0 auto; padding: 0 16px 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); transition: transform 0.2s; }
+  .card:hover { transform: translateY(-2px); }
+  .card-header { padding: 16px; color: #fff; position: relative; }
+  .card:nth-child(1) .card-header { background: linear-gradient(135deg, #4a90d9, #357abd); }
+  .card:nth-child(2) .card-header { background: linear-gradient(135deg, #e8943a, #d47e24); }
+  .card:nth-child(3) .card-header { background: linear-gradient(135deg, #52b873, #3da05e); }
+  .card-header .num { font-size: 11px; background: rgba(255,255,255,0.25); display: inline-block; padding: 2px 8px; border-radius: 10px; margin-bottom: 8px; }
+  .card-header h3 { font-size: 16px; font-weight: 600; line-height: 1.4; }
+  .card-header .rating { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+  .card-header .rating span { color: #ffd700; margin-right: 2px; }
+
+  .card-body { padding: 16px; }
+  .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { font-size: 13px; color: #999; }
+  .stat-label .icon { margin-right: 4px; }
+  .stat-value { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+  .stat-value.price { color: #e8943a; }
+
+  .info-row { background: #f8f9fa; border-radius: 8px; padding: 10px 12px; margin-top: 12px; }
+  .info-row .label { font-size: 11px; color: #999; margin-bottom: 4px; }
+  .info-row .content { font-size: 12px; color: #333; line-height: 1.6; }
+  .info-row .hours { font-size: 11px; color: #666; margin-top: 4px; }
+
+  .card-footer { padding: 0 16px 16px; }
+  .btn-group { display: flex; gap: 8px; }
+  .btn-map { flex: 1; padding: 10px; border: 1.5px solid #eee; border-radius: 10px; background: #fafafa; font-size: 13px; color: #555; text-align: center; text-decoration: none; transition: all 0.2s; }
+  .btn-map:hover { border-color: #4a90d9; color: #4a90d9; background: #f0f7ff; }
+
+  /* Recommendation */
+  .recommend { max-width: 900px; margin: 0 auto 32px; padding: 0 16px; }
+  .recommend-card { background: linear-gradient(135deg, #1a1a2e, #16213e); border-radius: 16px; padding: 20px 24px; color: #fff; }
+  .recommend-card h2 { font-size: 14px; opacity: 0.7; margin-bottom: 10px; font-weight: 400; }
+  .recommend-card .rec-content { display: flex; align-items: center; gap: 16px; }
+  .recommend-card .rec-badge { background: linear-gradient(135deg, #e8943a, #d47e24); padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .recommend-card .rec-desc { font-size: 13px; line-height: 1.8; opacity: 0.85; }
+
+  /* Signature dish */
+  .signature { margin-top: 12px; padding-top: 12px; border-top: 1px dashed #eee; }
+  .signature .title { font-size: 11px; color: #999; margin-bottom: 6px; }
+  .signature .text { font-size: 12px; color: #666; line-height: 1.5; }
+
+  @media (max-width: 720px) {
+    .summary-grid, .cards { grid-template-columns: 1fr; }
+    .summary-item:nth-child(1), .summary-item:nth-child(2), .summary-item:nth-child(3) { margin-bottom: 8px; }
+    .recommend-card .rec-content { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>商务用餐 · 餐厅方案对比</h1>
+  <p>共筛选 3 家候选餐厅，请查阅</p>
+</div>
+
+<!-- Summary Table -->
+<div class="summary">
+  <div class="summary-card">
+    <h2>对比总览</h2>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="rank">1</div>
+        <div class="name">鸿庐私厨</div>
+        <div class="stat">距离 <span>4.7</span> km</div>
+        <div class="stat">开车 <span>13</span> min</div>
+        <div class="stat">人均 <span>¥142</span></div>
+      </div>
+      <div class="summary-item">
+        <div class="rank">2</div>
+        <div class="name">云墨丹青私厨</div>
+        <div class="stat">距离 <span>1.2</span> km</div>
+        <div class="stat">开车 <span>6</span> min</div>
+        <div class="stat">人均 <span>¥150</span></div>
+      </div>
+      <div class="summary-item">
+        <div class="rank">3</div>
+        <div class="name">刀板香</div>
+        <div class="stat">距离 <span>171</span> m</div>
+        <div class="stat">步行 <span>2</span> min</div>
+        <div class="stat">人均 <span>¥74</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Cards -->
+<div class="cards">
+  <!-- Card 1: 鸿庐私厨 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="num">方案一</div>
+      <h3>鸿庐私厨</h3>
+      <div class="rating"><span>★</span>4.6</div>
+    </div>
+    <div class="card-body">
+      <div class="stat-row">
+        <span class="stat-label"><span class="icon">📍</span>距离</span>
+        <span class="stat-value">4.7 km</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label"><span class="icon">🚗</span>驾车时间</span>
+        <span class="stat-value">13 分钟</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label"><span class="icon">💰</span>人均消费</span>
+        <span class="stat-value price">¥142</span>
+      </div>
+
+      <div class="info-row">
+        <div class="label">地址</div>
+        <div class="content">蜀山区齐云山路与花亭湖路交口融创一号院 21 栋 301</div>
+      </div>
+
+      <div class="info-row">
+        <div class="label">营业时间</div>
+        <div class="content hours">09:30 - 21:30</div>
+      </div>
+
+      <div class="signature">
+        <div class="title">推荐菜</div>
+        <div class="text">口水鸡必点 · 鸡肉嫩到滑筷子，红油香而不辣</div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="btn-group">
+        <a class="btn-map" href="https://uri.amap.com/search?keyword=鸿庐私厨&key=yourkey" target="_blank">导航 →</a>
+        <a class="btn-map" href="tel:1" target="_blank">电话 →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2: 云墨丹青私厨 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="num">方案二</div>
+      <h3>云墨丹青私厨<br><small style="font-size:12px;opacity:0.8;">（华地润园店）</small></h3>
+      <div class="rating"><span>★</span>4.6</div>
+    </div>
+    <div class="card-body">
+      <div class="stat-row">
+        <span class="stat-label"><span class="icon">📍</span>距离</span>
+        <span class="stat-value">1.2 km</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label"><span class="icon">🚗</span>驾车时间</span>
+        <span class="stat-value">6 分钟</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label"><span class="icon">💰</span>人均消费</span>
+        <span class="stat-value price">¥150</span>
+      </div>
+
+      <div class="info-row">
+        <div class="label">地址</div>
+        <div class="content">蜀山区华地润园东门</div>
+      </div>
+
+      <div class="info-row">
+        <div class="label">营业时间</div>
+        <div class="content hours">10:00 - 22:30</div>
+      </div>
+
+      <div class="signature">
+        <div class="title">推荐菜</div>
+        <div class="text">红烧肉入口即化 · 肥而不腻，瘦肉部分也软嫩多汁</div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="btn-group">
+        <a class="btn-map" href="https://uri.amap.com/search?keyword=云墨丹青私厨+华地润园店&key=yourkey" target="_blank">导航 →</a>
+        <a class="btn-map" href="tel:1" target="_blank">电话 →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3: 刀板香 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="num">方案三</div>
+      <h3>刀板香<br><small style="font-size:12px;opacity:0.8;">（百乐门广场店）</small></h3>
+      <div class="rating"><span>★</span>4.5</div>
+    </div>
+    <div class="card-body">
+      <div class="stat-row">
+        <span class="stat-label"><span class="icon">📍</span>距离</span>
+        <span class="stat-value">171 m</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label"><span class="icon">🚶</span>步行时间</span>
+        <span class="stat-value">2 分钟</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label"><span class="icon">💰</span>人均消费</span>
+        <span class="stat-value price">¥74</span>
+      </div>
+
+      <div class="info-row">
+        <div class="label">地址</div>
+        <div class="content">蜀山区莲花社区莲花路百乐门广场（商场）</div>
+      </div>
+
+      <div class="info-row">
+        <div class="label">营业时间</div>
+        <div class="content hours">11:00-14:00, 17:00-21:00</div>
+      </div>
+
+      <div class="signature">
+        <div class="title">特色</div>
+        <div class="text">可订包间 · 可订大厅 · 性价比高</div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="btn-group">
+        <a class="btn-map" href="https://uri.amap.com/search?keyword=刀板香+百乐门广场店&key=yourkey" target="_blank">导航 →</a>
+        <a class="btn-map" href="tel:1" target="_blank">电话 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recommendation -->
+<div class="recommend">
+  <div class="recommend-card">
+    <h2>推荐建议</h2>
+    <div class="rec-content">
+      <div class="rec-badge">首选推荐</div>
+      <div class="rec-desc">
+        <strong>云墨丹青私厨（华地润园店）</strong> — ⭐4.6 分，70 条评价，距离近（1.2km）开车仅 6 分钟，人均 ¥150 规格得体，私房菜环境适合商务接待。营业时间 10:00-22:30 较灵活。<br><br>
+        <strong>备选方案</strong> 若希望更便捷，可选 <strong>刀板香</strong>，步行 2 分钟即达，人均 ¥75 性价比高，可订包间。<br>
+        <strong>鸿庐私厨</strong> 为蜀山区私房菜榜第 8 名，口水鸡必点，适合追求特色徽菜的场合。
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
