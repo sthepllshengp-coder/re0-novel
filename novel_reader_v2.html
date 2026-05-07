@@ -352,6 +352,7 @@
         let localFiles = {};
         let currentChapter = -1;
         let expandedVolumes = {};
+        let chapterCache = {}; // 预加载缓存
 
         const volNames = {
             '010': '第 1 卷 · 王选篇', '020': '第 2 卷 · 宅邸篇', '021': '第 2 卷短篇',
@@ -529,26 +530,56 @@
             }
 
             // 从本地加载
-            fetch(`novel_content/${chap.file}`)
-                .then(r => {
-                    if (!r.ok) throw new Error('文件不存在');
-                    return r.text();
-                })
-                .then(html => {
-                    const content = extractContent(html);
-                    if (content) {
-                        document.getElementById('articleContent').innerHTML = content;
-                        renderNav();
-                        window.scrollTo(0, 0);
-                    } else {
-                        document.getElementById('articleContent').innerHTML = '<div class="error-msg">章节内容解析失败</div>';
-                    }
-                })
-                .catch(e => {
-                    document.getElementById('articleContent').innerHTML = `<div class="error-msg">加载失败：${e.message}</div>`;
-                });
+            if (chapterCache[idx]) {
+                // 使用缓存
+                document.getElementById('articleContent').innerHTML = chapterCache[idx];
+                renderNav();
+                window.scrollTo(0, 0);
+            } else {
+                fetch(`novel_content/${chap.file}`)
+                    .then(r => {
+                        if (!r.ok) throw new Error('文件不存在');
+                        return r.text();
+                    })
+                    .then(html => {
+                        const content = extractContent(html);
+                        if (content) {
+                            document.getElementById('articleContent').innerHTML = content;
+                            // 存入缓存
+                            chapterCache[idx] = content;
+                            renderNav();
+                            window.scrollTo(0, 0);
+                            // 预加载相邻章节
+                            preloadNearbyChapters(idx);
+                        } else {
+                            document.getElementById('articleContent').innerHTML = '<div class="error-msg">章节内容解析失败</div>';
+                        }
+                    })
+                    .catch(e => {
+                        document.getElementById('articleContent').innerHTML = `<div class="error-msg">加载失败：${e.message}</div>`;
+                    });
+            }
 
             closePanels();
+        }
+
+        // 预加载相邻的 5 章（前后各 2 章 + 当前章附近）
+        function preloadNearbyChapters(idx) {
+            const preloadRange = 3; // 前后各预加载 3 章
+            for (let i = idx - preloadRange; i <= idx + preloadRange; i++) {
+                if (i >= 0 && i < chapters.length && !chapterCache[i]) {
+                    const chap = chapters[i];
+                    fetch(`novel_content/${chap.file}`)
+                        .then(r => r.text())
+                        .then(html => {
+                            const content = extractContent(html);
+                            if (content) {
+                                chapterCache[i] = content;
+                            }
+                        })
+                        .catch(() => {}); // 静默失败
+                }
+            }
         }
 
         function renderNav() {
