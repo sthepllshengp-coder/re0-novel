@@ -371,7 +371,7 @@
         // 加载章节索引
         async function loadChapterIndex() {
             try {
-                const response = await fetch('chapter_index_full.json');
+                const response = await fetch('chapter_index_full.json?v=' + Date.now());
                 if (response.ok) {
                     chapters = await response.json();
                 }
